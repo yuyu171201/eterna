@@ -6,13 +6,18 @@ class Unit:
         self.HP = HP
         self.ATK = ATK
 
+    def take_damage(self, damage):
+        self.HP = self.HP - damage
+        if self.HP < 0:
+            self.HP = 0
+
 
 def atack(unit1, unit2):
     print(f"{unit1.name} の攻撃!")
     print(f"{unit2.name} に {unit1.ATK} のダメージ!")
     print()
 
-    unit2.HP = unit2.HP - unit1.ATK
+    unit2.take_damage(unit1.ATK)
 
 
 def battle(unit1, unit2):
