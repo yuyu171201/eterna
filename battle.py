@@ -11,6 +11,12 @@ class Unit:
         if self.HP < 0:
             self.HP = 0
 
+    def show_status(self):
+        print(f"{self.name} のステータス")
+        print(f"HP: {self.HP}")
+        print(f"ATK: {self.ATK}")
+        print()
+
 
 def atack(unit1, unit2):
     print(f"{unit1.name} の攻撃!")
@@ -39,5 +45,7 @@ def battle(unit1, unit2):
 
 if __name__ == "__main__":
     yusha = Unit("勇者", 20, 10)
+    yusha.show_status()
     slime = Unit("スライム", 20, 5)
+    slime.show_status()
     battle(yusha, slime)
