@@ -21,8 +21,7 @@ class Unit:
 
 
 def attack(unit1, unit2):
-    # ダメージメッセージ
-    # タプル(攻撃者,　被攻撃者, ダメージ量)
+    # 辞書型(攻撃者,　被攻撃者, ダメージ量)
     event = {'attacker':unit1.name, 'defender':unit2.name, 'damage':unit1.atk}
 
     unit2.take_damage(unit1.atk)
