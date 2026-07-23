@@ -16,7 +16,7 @@ def test_fastest_unit():
     unit1 = Unit("勇者", 20, 10, 100)
     unit2 = Unit("スライム", 20, 5, 90)
     loser, logs = battle(unit1, unit2)
-    assert logs[0][0][0] == "勇者"
+    assert logs[0]['attacker'] == "勇者"
 
 def test_loser():
     unit1 = Unit("勇者", 20, 10, 100)
