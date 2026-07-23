@@ -20,6 +20,7 @@ class Unit:
         print()
 
 
+# 攻撃処理
 def attack(unit1, unit2):
     # 辞書型(攻撃者,　被攻撃者, ダメージ量)
     event = {'attacker':unit1.name, 'defender':unit2.name, 'damage':unit1.atk}
@@ -28,6 +29,7 @@ def attack(unit1, unit2):
     return event
 
 
+# 攻撃対象の選択
 def select_target(attacker, unit1, unit2):
     if attacker == unit1:
         return unit2
@@ -35,14 +37,28 @@ def select_target(attacker, unit1, unit2):
         return unit1
 
 
-def battle(unit1, unit2):
+# 素早さ順に並び替える
+def build_moveorder(unit1, unit2):
+    if unit1.spd >= unit2.spd:
+        return [unit1, unit2]
+    else:
+        return [unit2, unit1]
+
+
+# 敗北者の判定
+def find_loser(unit):
+    if unit.hp <= 0:
+        return unit
+    else:
+        return None
+
+
+# バトルの実行
+def run_battle(unit1, unit2):
     turn = 0
     logs = []
 
-    if unit1.spd >= unit2.spd:
-        steps = [unit1, unit2]
-    else:
-        steps = [unit2, unit1]
+    steps = build_moveorder(unit1, unit2)
 
     while True:
         turn += 1
@@ -52,7 +68,7 @@ def battle(unit1, unit2):
             event['turn'] = turn
             logs.append(event)
 
-            if enemy.hp <= 0:
+            if find_loser(enemy):
                 return enemy, logs
 
 
@@ -64,7 +80,8 @@ if __name__ == "__main__":
 
     print("バトル開始!\n")
 
-    loser, logs = battle(yusha, slime)
+
+    loser, logs = run_battle(yusha, slime)
     for log in logs:
         print(f"turn {log['turn']}: {log['attacker']} は {log['defender']} に {log['damage']} のダメージを与えた!\n")
     print(f"{loser.name} は倒れた!")
