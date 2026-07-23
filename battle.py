@@ -18,7 +18,7 @@ class Unit:
         print()
 
 
-def atack(unit1, unit2):
+def attack(unit1, unit2):
     # ダメージメッセージ
     # タプル(攻撃者,　被攻撃者, ダメージ量)
     event = (unit1.name, unit2.name, unit1.ATK)
@@ -34,9 +34,9 @@ def battle(unit1, unit2):
     while unit1.HP > 0 and unit2.HP > 0:
         step += 1
         if step % 2 == 1:
-            logs.append([atack(unit1, unit2), step])
+            logs.append([attack(unit1, unit2), step])
         else:
-            logs.append([atack(unit2, unit1), step])
+            logs.append([attack(unit2, unit1), step])
 
 
     # 勝敗判定 ： 倒された側を返す
