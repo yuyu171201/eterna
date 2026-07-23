@@ -1,29 +1,29 @@
 class Unit:
 
     # 初期化
-    def __init__(self,name , HP, ATK):
+    def __init__(self,name , hp, atk):
         self.name = name
-        self.HP = HP
-        self.ATK = ATK
+        self.hp = hp
+        self.atk = atk
 
     def take_damage(self, damage):
-        self.HP = self.HP - damage
-        if self.HP < 0:
-            self.HP = 0
+        self.hp = self.hp - damage
+        if self.hp < 0:
+            self.hp = 0
 
     def show_status(self):
         print(f"{self.name} のステータス")
-        print(f"HP: {self.HP}")
-        print(f"ATK: {self.ATK}")
+        print(f"HP: {self.hp}")
+        print(f"ATK: {self.atk}")
         print()
 
 
 def attack(unit1, unit2):
     # ダメージメッセージ
     # タプル(攻撃者,　被攻撃者, ダメージ量)
-    event = (unit1.name, unit2.name, unit1.ATK)
+    event = (unit1.name, unit2.name, unit1.atk)
 
-    unit2.take_damage(unit1.ATK)
+    unit2.take_damage(unit1.atk)
     return event
 
 
@@ -31,7 +31,7 @@ def battle(unit1, unit2):
     logs = []
 
     step = 0
-    while unit1.HP > 0 and unit2.HP > 0:
+    while unit1.hp > 0 and unit2.hp > 0:
         step += 1
         if step % 2 == 1:
             logs.append([attack(unit1, unit2), step])
@@ -40,9 +40,9 @@ def battle(unit1, unit2):
 
 
     # 勝敗判定 ： 倒された側を返す
-    if unit1.HP <= 0:
+    if unit1.hp <= 0:
         return unit1, logs
-    if unit2.HP <= 0:
+    if unit2.hp <= 0:
         return unit2, logs
 
 
