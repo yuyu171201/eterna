@@ -23,7 +23,7 @@ class Unit:
 def attack(unit1, unit2):
     # ダメージメッセージ
     # タプル(攻撃者,　被攻撃者, ダメージ量)
-    event = (unit1.name, unit2.name, unit1.atk)
+    event = {'attacker':unit1.name, 'defender':unit2.name, 'damage':unit1.atk}
 
     unit2.take_damage(unit1.atk)
     return event
@@ -49,7 +49,10 @@ def battle(unit1, unit2):
         turn += 1
         for step in steps:
             enemy = select_target(step, steps[0], steps[1])
-            logs.append([attack(step, enemy), turn])
+            event = attack(step, enemy)
+            event['turn'] = turn
+            logs.append(event)
+
             if enemy.hp <= 0:
                 return enemy, logs
 
@@ -64,5 +67,5 @@ if __name__ == "__main__":
 
     loser, logs = battle(yusha, slime)
     for log in logs:
-        print(f"turn {log[1]}: {log[0][0]} は {log[0][1]} に {log[0][2]} のダメージを与えた!\n")
+        print(f"turn {log['turn']}: {log['attacker']} は {log['defender']} に {log['damage']} のダメージを与えた!\n")
     print(f"{loser.name} は倒れた!")
