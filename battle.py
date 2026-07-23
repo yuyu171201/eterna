@@ -16,6 +16,7 @@ class Unit:
         print(f"{self.name} のステータス")
         print(f"HP: {self.hp}")
         print(f"ATK: {self.atk}")
+        print(f"SPD: {self.spd}")
         print()
 
 
