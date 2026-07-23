@@ -21,29 +21,29 @@ class Unit:
 def atack(unit1, unit2):
     # ダメージメッセージ
     # タプル(攻撃者,　被攻撃者, ダメージ量)
-    damage_message = (unit1.name, unit2.name, unit1.ATK)
+    event = (unit1.name, unit2.name, unit1.ATK)
 
     unit2.take_damage(unit1.ATK)
-    return damage_message
+    return event
 
 
 def battle(unit1, unit2):
-    messages = []
+    logs = []
 
     step = 0
     while unit1.HP > 0 and unit2.HP > 0:
         step += 1
         if step % 2 == 1:
-            messages.append([atack(unit1, unit2), step])
+            logs.append([atack(unit1, unit2), step])
         else:
-            messages.append([atack(unit2, unit1), step])
+            logs.append([atack(unit2, unit1), step])
 
 
     # 勝敗判定 ： 倒された側を返す
     if unit1.HP <= 0:
-        return unit1, messages
+        return unit1, logs
     if unit2.HP <= 0:
-        return unit2, messages
+        return unit2, logs
 
 
 if __name__ == "__main__":
