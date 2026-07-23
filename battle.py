@@ -19,28 +19,31 @@ class Unit:
 
 
 def atack(unit1, unit2):
-    print(f"{unit1.name} の攻撃!")
-    print(f"{unit2.name} に {unit1.ATK} のダメージ!")
-    print()
+    # ダメージメッセージ
+    # タプル(攻撃者,　被攻撃者, ダメージ量)
+    damage_message = (unit1.name, unit2.name, unit1.ATK)
 
     unit2.take_damage(unit1.ATK)
+    return damage_message
 
 
 def battle(unit1, unit2):
-    print("バトル開始!\n")
+    messages = []
 
     step = 0
     while unit1.HP > 0 and unit2.HP > 0:
         step += 1
         if step % 2 == 1:
-            atack(unit1, unit2)
+            messages.append([atack(unit1, unit2), step])
         else:
-            atack(unit2, unit1)
+            messages.append([atack(unit2, unit1), step])
 
+
+    # 勝敗判定 ： 倒された側を返す
     if unit1.HP <= 0:
-        print(f"{unit1.name} は倒れた!")
+        return unit1, messages
     if unit2.HP <= 0:
-        print(f"{unit2.name} は倒れた!")
+        return unit2, messages
 
 
 if __name__ == "__main__":
@@ -48,4 +51,10 @@ if __name__ == "__main__":
     yusha.show_status()
     slime = Unit("スライム", 20, 5)
     slime.show_status()
-    battle(yusha, slime)
+
+    print("バトル開始!\n")
+
+    loser, logs = battle(yusha, slime)
+    for log in logs:
+        print(f"step {log[1]}: {log[0][0]} は {log[0][1]} に {log[0][2]} のダメージを与えた!\n")
+    print(f"{loser.name} は倒れた!")
