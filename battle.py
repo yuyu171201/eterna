@@ -39,7 +39,7 @@ def battle(unit1, unit2):
     turn = 0
     logs = []
 
-    if unit1.spd > unit2.spd:
+    if unit1.spd >= unit2.spd:
         steps = [unit1, unit2]
     else:
         steps = [unit2, unit1]
