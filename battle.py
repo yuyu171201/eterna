@@ -28,7 +28,7 @@ def attack(unit1, unit2):
     return event
 
 
-def select_attack_order(attacker, unit1, unit2):
+def select_target(attacker, unit1, unit2):
     if attacker == unit1:
         return unit2
     else:
@@ -47,7 +47,7 @@ def battle(unit1, unit2):
     while True:
         turn += 1
         for step in steps:
-            enemy = select_attack_order(step, steps[0], steps[1])
+            enemy = select_target(step, steps[0], steps[1])
             logs.append([attack(step, enemy), turn])
             if enemy.hp <= 0:
                 return enemy, logs
