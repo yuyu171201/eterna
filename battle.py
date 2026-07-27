@@ -79,7 +79,7 @@ def do_attack(attacker, unit1, unit2):
 
 
 # バトルの実行
-def run_battle(unit1, unit2):
+def auto_battle(unit1, unit2):
     turn = 0
     logs = []
 
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     print("バトル開始!\n")
 
 
-    loser, logs = run_battle(yusha, slime)
+    loser, logs = auto_battle(yusha, slime)
     for log in logs:
         print(f"turn {log['turn']}: {log['attacker']} は {log['defender']} に {log['damage']} のダメージを与えた!\n")
     print(f"{loser.name} は倒れた!")
