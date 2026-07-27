@@ -12,9 +12,7 @@ class Unit:
         self.spd = spd
 
     def take_damage(self, damage):
-        self.hp = self.hp - damage
-        if self.hp < 0:
-            self.hp = 0
+        self.hp = max(self.hp - damage, 0)
 
     def show_status(self):
         print(f"{self.name} のステータス")
