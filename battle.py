@@ -66,8 +66,6 @@ def build_moveorder(unit1, unit2):
 
     return steps
 
-    
-
 
 # 敗北者の判定
 def find_loser(unit):
