@@ -1,9 +1,9 @@
 # import pytest
 
 from battle import (
+    ActionOrderManager,
     Unit,
     auto_battle,
-    build_moveorder,
 )
 
 
@@ -37,17 +37,19 @@ def test_loser():
     loser, _ = auto_battle(unit1, unit2)
     assert loser.name == "スライム"
 
-def test_speed_order1():
-    unit1 = Unit("勇者", 20, 10, 170)
+def test_speed_order():
+    unit1 = Unit("勇者", 20, 10, 100)
     unit2 = Unit("スライム", 20, 5, 90)
-    steps = build_moveorder(unit1, unit2)
-    assert steps[0].name == "勇者"
-    assert steps[1].name == "スライム"
-    assert steps[2].name == "勇者"
+    action = ActionOrderManager(unit1, unit2)
+    assert action.ct[unit1] == 0
+    assert action.ct[unit2] == 0
+    action.send_turn()
+    assert action.ct[unit1] == 100
+    assert action.ct[unit2] == 90
+    for i in range(99):
+        action.send_turn()
+    assert action.ct[unit1] == 0
+    assert action.ct[unit2] == 9000
 
-def test_speed_order2():
-    unit1 = Unit("勇者", 20, 10, 101)
-    unit2 = Unit("スライム", 20, 5, 100)
-    steps = build_moveorder(unit1, unit2)
-    assert steps[0].name == "勇者"
-    assert steps[1].name == "スライム"
+
+
