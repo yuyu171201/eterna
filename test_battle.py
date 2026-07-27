@@ -43,11 +43,11 @@ def test_speed_order():
     action = ActionOrderManager(unit1, unit2)
     assert action.ct[unit1] == 0
     assert action.ct[unit2] == 0
-    action.send_turn()
+    action.tick()
     assert action.ct[unit1] == 100
     assert action.ct[unit2] == 90
     for i in range(99):
-        action.send_turn()
+        action.tick()
     assert action.ct[unit1] == 0
     assert action.ct[unit2] == 9000
 

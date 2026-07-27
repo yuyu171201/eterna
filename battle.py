@@ -33,7 +33,7 @@ class ActionOrderManager:
         self.unit2 = unit2
         self.ct = {unit1: 0, unit2: 0}
 
-    def send_turn(self):
+    def tick(self):
         self.ct[self.unit1] += self.unit1.spd
         self.ct[self.unit2] += self.unit2.spd
 
@@ -93,9 +93,9 @@ def auto_battle(unit1, unit2):
 
 
 if __name__ == "__main__":
-    yusha = Unit("勇者", 20, 10, 100)
+    yusha = Unit("勇者", 100, 10, 60)
     yusha.show_status()
-    slime = Unit("スライム", 20, 5, 90)
+    slime = Unit("スライム", 100, 5, 50)
     slime.show_status()
 
     print("バトル開始!\n")
