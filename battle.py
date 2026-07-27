@@ -87,7 +87,7 @@ def run_battle(unit1, unit2):
     while True:
         turn += 1
         for step in steps:
-            enemy = select_target(step, steps[0], steps[1])
+            enemy = select_target(step, unit1, unit2)
             event = attack(step, enemy)
             event['turn'] = turn
             logs.append(event)
