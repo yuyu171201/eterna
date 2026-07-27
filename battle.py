@@ -72,12 +72,10 @@ def build_moveorder(unit1, unit2):
     return steps
 
 
-# 敗北者の判定
-def find_loser(unit):
-    if unit.hp <= 0:
-        return unit
-    else:
-        return None
+def do_attack(attacker, unit1, unit2):
+    enemy = select_target(attacker, unit1, unit2)
+    event = attack(attacker, enemy)
+    return event, enemy
 
 
 # バトルの実行
@@ -90,12 +88,11 @@ def run_battle(unit1, unit2):
     while True:
         turn += 1
         for step in steps:
-            enemy = select_target(step, unit1, unit2)
-            event = attack(step, enemy)
+            event, enemy = do_attack(step, unit1, unit2)
             event['turn'] = turn
             logs.append(event)
 
-            if find_loser(enemy):
+            if enemy.hp <= 0:
                 return enemy, logs
 
 
