@@ -1,6 +1,11 @@
 # import pytest
 
-from battle import Unit, run_battle, build_moveorder
+from battle import (
+    Unit,
+    build_moveorder,
+    run_battle,
+)
+
 
 def test_take_damage():
     unit = Unit("勇者", 20, 10, 100)
@@ -15,13 +20,13 @@ def test_not_minus_hp():
 def test_fastest_unit():
     unit1 = Unit("勇者", 20, 10, 100)
     unit2 = Unit("スライム", 20, 5, 90)
-    loser, logs = run_battle(unit1, unit2)
+    _, logs = run_battle(unit1, unit2)
     assert logs[0]['attacker'] == "勇者"
 
 def test_loser():
     unit1 = Unit("勇者", 20, 10, 100)
     unit2 = Unit("スライム", 20, 5, 90)
-    loser, logs = run_battle(unit1, unit2)
+    loser, _ = run_battle(unit1, unit2)
     assert loser.name == "スライム"
 
 def test_speed_order():
