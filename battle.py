@@ -1,6 +1,5 @@
-import heapq
-
 BASE_SPEED = 80
+ACTION_COST = 10000
 
 class Unit:
     id_counter = 0
@@ -28,6 +27,26 @@ class Unit:
         print(f"SPD: {self.spd}")
         print()
 
+class ActionOrderManager:
+    def __init__(self, unit1, unit2):
+        self.unit1 = unit1
+        self.unit2 = unit2
+        self.ct = {unit1: 0, unit2: 0}
+
+    def send_turn(self):
+        self.ct[self.unit1] += self.unit1.spd
+        self.ct[self.unit2] += self.unit2.spd
+
+        if self.ct[self.unit1] >= ACTION_COST:
+            self.ct[self.unit1] -= ACTION_COST
+            return self.unit1
+        
+        if self.ct[self.unit2] >= ACTION_COST:
+            self.ct[self.unit2] -= ACTION_COST
+            return self.unit2
+
+        return None
+        
 
 # 攻撃処理
 def attack(unit1, unit2):
@@ -46,32 +65,6 @@ def select_target(attacker, unit1, unit2):
         return unit1
 
 
-# 素早さ順に並び替える
-def build_moveorder(unit1, unit2):
-    unit1_amount = max(unit1.spd // BASE_SPEED, 1)
-    unit2_amount = max(unit2.spd // BASE_SPEED, 1)
-
-    unit1_spd = []
-    unit2_spd = []
-
-    steps = []
-    for i in range(unit1_amount):
-        unit1_spd.append(unit1.spd / (i + 1))
-    for i in range(unit2_amount):
-        unit2_spd.append(unit2.spd / (i + 1))
-
-    steps = [
-        unit
-        for _, unit in heapq.merge(
-            [(v, unit1) for v in unit1_spd], 
-            [(v, unit2) for v in unit2_spd],
-            key = lambda p: -p[0]
-        )
-    ]
-
-    return steps
-
-
 def do_attack(attacker, unit1, unit2):
     enemy = select_target(attacker, unit1, unit2)
     event = attack(attacker, enemy)
@@ -83,17 +76,20 @@ def auto_battle(unit1, unit2):
     turn = 0
     logs = []
 
-    steps = build_moveorder(unit1, unit2)
+    action = ActionOrderManager(unit1, unit2)
 
     while True:
-        turn += 1
-        for step in steps:
-            event, enemy = do_attack(step, unit1, unit2)
-            event['turn'] = turn
-            logs.append(event)
+        attacker = action.send_turn()
+        if attacker is None:
+            continue
 
-            if enemy.hp <= 0:
-                return enemy, logs
+        turn += 1
+        event, enemy = do_attack(attacker, unit1, unit2)
+        event['turn'] = turn
+        logs.append(event)
+
+        if enemy.hp <= 0:
+            return enemy, logs
 
 
 if __name__ == "__main__":
@@ -103,7 +99,6 @@ if __name__ == "__main__":
     slime.show_status()
 
     print("バトル開始!\n")
-
 
     loser, logs = auto_battle(yusha, slime)
     for log in logs:
