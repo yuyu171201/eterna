@@ -1,6 +1,6 @@
 # import pytest
 
-from battle import Unit, run_battle
+from battle import Unit, run_battle, build_moveorder
 
 def test_take_damage():
     unit = Unit("勇者", 20, 10, 100)
@@ -23,3 +23,11 @@ def test_loser():
     unit2 = Unit("スライム", 20, 5, 90)
     loser, logs = run_battle(unit1, unit2)
     assert loser.name == "スライム"
+
+def test_speed_order():
+    unit1 = Unit("勇者", 20, 10, 170)
+    unit2 = Unit("スライム", 20, 5, 90)
+    steps = build_moveorder(unit1, unit2)
+    assert steps[0].name == "勇者"
+    assert steps[1].name == "スライム"
+    assert steps[2].name == "勇者"
