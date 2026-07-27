@@ -46,6 +46,13 @@ class ActionOrderManager:
             return self.unit2
 
         return None
+
+    def next_actor(self):
+        while True:
+            actor = self.tick()
+            if actor is not None:
+                return actor
+
         
 
 # 攻撃処理
@@ -79,9 +86,7 @@ def auto_battle(unit1, unit2):
     action = ActionOrderManager(unit1, unit2)
 
     while True:
-        attacker = action.tick()
-        if attacker is None:
-            continue
+        attacker = action.next_actor()
 
         turn += 1
         event, enemy = do_attack(attacker, unit1, unit2)
