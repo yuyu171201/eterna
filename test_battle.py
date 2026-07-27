@@ -37,10 +37,17 @@ def test_loser():
     loser, _ = auto_battle(unit1, unit2)
     assert loser.name == "スライム"
 
-def test_speed_order():
+def test_speed_order1():
     unit1 = Unit("勇者", 20, 10, 170)
     unit2 = Unit("スライム", 20, 5, 90)
     steps = build_moveorder(unit1, unit2)
     assert steps[0].name == "勇者"
     assert steps[1].name == "スライム"
     assert steps[2].name == "勇者"
+
+def test_speed_order2():
+    unit1 = Unit("勇者", 20, 10, 101)
+    unit2 = Unit("スライム", 20, 5, 100)
+    steps = build_moveorder(unit1, unit2)
+    assert steps[0].name == "勇者"
+    assert steps[1].name == "スライム"
