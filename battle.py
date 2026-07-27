@@ -43,8 +43,8 @@ def select_target(attacker, unit1, unit2):
 
 # 素早さ順に並び替える
 def build_moveorder(unit1, unit2):
-    unit1_amount = max(unit1.spd // BASE_SPEED, 0)
-    unit2_amount = max(unit2.spd // BASE_SPEED, 0)
+    unit1_amount = max(unit1.spd // BASE_SPEED, 1)
+    unit2_amount = max(unit2.spd // BASE_SPEED, 1)
 
     unit1_spd = []
     unit2_spd = []
