@@ -56,9 +56,9 @@ def build_moveorder(unit1, unit2):
 
     steps = []
     for i in range(unit1_amount):
-        unit1_spd.append(unit1.spd // (i + 1))
+        unit1_spd.append(unit1.spd / (i + 1))
     for i in range(unit2_amount):
-        unit2_spd.append(unit2.spd // (i + 1))
+        unit2_spd.append(unit2.spd / (i + 1))
 
     steps = [
         unit
