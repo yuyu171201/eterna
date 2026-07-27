@@ -1,3 +1,7 @@
+import heapq
+
+BASE_SPEED = 80
+
 class Unit:
 
     # 初期化
@@ -39,10 +43,30 @@ def select_target(attacker, unit1, unit2):
 
 # 素早さ順に並び替える
 def build_moveorder(unit1, unit2):
-    if unit1.spd >= unit2.spd:
-        return [unit1, unit2]
-    else:
-        return [unit2, unit1]
+    unit1_amount = max(unit1.spd // BASE_SPEED, 0)
+    unit2_amount = max(unit2.spd // BASE_SPEED, 0)
+
+    unit1_spd = []
+    unit2_spd = []
+
+    steps = []
+    for i in range(unit1_amount):
+        unit1_spd.append(unit1.spd // (i + 1))
+    for i in range(unit2_amount):
+        unit2_spd.append(unit2.spd // (i + 1))
+
+    steps = [
+        unit
+        for _, unit in heapq.merge(
+            [(v, unit1) for v in unit1_spd], 
+            [(v, unit2) for v in unit2_spd],
+            key = lambda p: -p[0]
+        )
+    ]
+
+    return steps
+
+    
 
 
 # 敗北者の判定
