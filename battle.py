@@ -79,7 +79,7 @@ def auto_battle(unit1, unit2):
     action = ActionOrderManager(unit1, unit2)
 
     while True:
-        attacker = action.send_turn()
+        attacker = action.tick()
         if attacker is None:
             continue
 
