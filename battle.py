@@ -28,22 +28,18 @@ class Unit:
         print()
 
 class ActionOrderManager:
-    def __init__(self, unit1, unit2):
-        self.unit1 = unit1
-        self.unit2 = unit2
-        self.ct = {unit1: 0, unit2: 0}
+    def __init__(self, units):
+        self.units = units
+        self.ct = {unit: 0 for unit in units}
 
     def tick(self):
-        self.ct[self.unit1] += self.unit1.spd
-        self.ct[self.unit2] += self.unit2.spd
+        for ids in self.units:
+            self.ct[ids] += self.units[ids].spd
 
-        if self.ct[self.unit1] >= ACTION_COST:
-            self.ct[self.unit1] -= ACTION_COST
-            return self.unit1
-        
-        if self.ct[self.unit2] >= ACTION_COST:
-            self.ct[self.unit2] -= ACTION_COST
-            return self.unit2
+        for ids in sorted(self.units.keys()):
+            if self.ct[ids] >= ACTION_COST:
+                self.ct[ids] -= ACTION_COST
+                return self.units[ids]
 
         return None
 
@@ -83,7 +79,9 @@ def auto_battle(unit1, unit2):
     turn = 0
     logs = []
 
-    action = ActionOrderManager(unit1, unit2)
+    units = {unit1.id: unit1, unit2.id: unit2}
+
+    action = ActionOrderManager(units)
 
     while True:
         attacker = action.next_actor()

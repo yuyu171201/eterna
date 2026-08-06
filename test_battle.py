@@ -39,17 +39,19 @@ def test_loser():
 
 def test_speed_order():
     unit1 = Unit("勇者", 20, 10, 100)
+    unit1_id = 1
     unit2 = Unit("スライム", 20, 5, 90)
-    action = ActionOrderManager(unit1, unit2)
-    assert action.ct[unit1] == 0
-    assert action.ct[unit2] == 0
+    unit2_id = 2
+    action = ActionOrderManager({unit1_id: unit1, unit2_id: unit2})
+    assert action.ct[unit1_id] == 0
+    assert action.ct[unit2_id] == 0
     action.tick()
-    assert action.ct[unit1] == 100
-    assert action.ct[unit2] == 90
+    assert action.ct[unit1_id] == 100
+    assert action.ct[unit2_id] == 90
     for i in range(99):
         action.tick()
-    assert action.ct[unit1] == 0
-    assert action.ct[unit2] == 9000
+    assert action.ct[unit1_id] == 0
+    assert action.ct[unit2_id] == 9000
 
 
 
