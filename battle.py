@@ -33,13 +33,13 @@ class ActionOrderManager:
         self.ct = {unit: 0 for unit in units}
 
     def tick(self):
-        for ids in self.units:
-            self.ct[ids] += self.units[ids].spd
+        for uid in self.units:
+            self.ct[uid] += self.units[uid].spd
 
-        for ids in sorted(self.units.keys()):
-            if self.ct[ids] >= ACTION_COST:
-                self.ct[ids] -= ACTION_COST
-                return self.units[ids]
+        for uid in sorted(self.units.keys()):
+            if self.ct[uid] >= ACTION_COST:
+                self.ct[uid] -= ACTION_COST
+                return self.units[uid]
 
         return None
 
