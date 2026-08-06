@@ -44,7 +44,7 @@ class ActionOrderManager:
                 max_ct = self.ct[uid]
                 max_uid = uid
 
-        if max_ct >= ACTION_COST:
+        if max_uid is not None:
                 self.ct[max_uid] -= ACTION_COST
                 return self.units[max_uid]
 
