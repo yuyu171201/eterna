@@ -36,10 +36,17 @@ class ActionOrderManager:
         for uid in self.units:
             self.ct[uid] += self.units[uid].spd
 
+        max_ct = 0
+        max_uid = None
+
         for uid in sorted(self.units.keys()):
-            if self.ct[uid] >= ACTION_COST:
-                self.ct[uid] -= ACTION_COST
-                return self.units[uid]
+            if self.ct[uid] >= ACTION_COST and self.ct[uid] > max_ct:
+                max_ct = self.ct[uid]
+                max_uid = uid
+
+        if max_ct >= ACTION_COST:
+                self.ct[max_uid] -= ACTION_COST
+                return self.units[max_uid]
 
         return None
 
