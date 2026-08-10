@@ -1,49 +1,69 @@
+import unit
+
 BASE_SPEED = 80
 ACTION_COST = 10000
 
-class Unit:
-    id_counter = 0
+class CombatState:
+    def __init__(self, unit):
+        self.unit = unit
+        
+        self.current_hp = unit.max_hp
 
-    # 初期化
-    def __init__(self,name , hp, atk, spd, id=None):
-        self.name = name
-        self.hp = hp
-        self.atk = atk
-        self.spd = spd
-        if id is None:
-            Unit.id_counter += 1
-            self.id = Unit.id_counter
-        else:
-            self.id = id
-
+        self.ct = 0
+        self.threshold = ACTION_COST
 
     def take_damage(self, damage):
-        self.hp = max(self.hp - damage, 0)
+        self.current_hp = max(self.current_hp - damage, 0)
 
-    def show_status(self):
-        print(f"{self.name} のステータス")
-        print(f"HP: {self.hp}")
-        print(f"ATK: {self.atk}")
-        print(f"SPD: {self.spd}")
-        print()
+    def on_acted(self):
+        self.ct -= self.threshold
+
+    def overheat(self):
+        self.threshold += ACTION_COST
+
+    def cooldown(self):
+        self.threshold = ACTION_COST
+
+    @property
+    def atk(self):
+        return self.unit.atk
+
+    @property
+    def speed(self):
+        return self.unit.spd
+
+    @property
+    def name(self):
+        return self.unit.name
+
+    @property
+    def id(self):
+        return self.unit.id
 
 class ActionOrderManager:
-    def __init__(self, unit1, unit2):
-        self.unit1 = unit1
-        self.unit2 = unit2
-        self.ct = {unit1: 0, unit2: 0}
+    def __init__(self, actors):
+        self.actors = actors
 
     def tick(self):
-        self.ct[self.unit1] += self.unit1.spd
-        self.ct[self.unit2] += self.unit2.spd
+        for actor in self.actors.values():
+            actor.ct += actor.speed
 
-        if self.ct[self.unit1] >= ACTION_COST:
-            self.ct[self.unit1] -= ACTION_COST
-            return self.unit1
-        
-        if self.ct[self.unit2] >= ACTION_COST:
-            self.ct[self.unit2] -= ACTION_COST
-            return self.unit2
+        max_ct = 0
+        maxed_actor = None
+
+        for actor in self.actors.values():
+            if actor.ct >= actor.threshold and actor.ct > max_ct:
+                max_ct = actor.ct
+                maxed_actor = actor
+
+        if maxed_actor is not None:
+            for actor in self.actors.values():
+                if actor == maxed_actor:
+                    actor.on_acted()
+                    actor.overheat()
+                else:
+                    actor.cooldown()
+            return maxed_actor
 
         return None
 
@@ -56,24 +76,24 @@ class ActionOrderManager:
         
 
 # 攻撃処理
-def attack(unit1, unit2):
+def attack(actor1, actor2):
     # 辞書型(攻撃者,　被攻撃者, ダメージ量)
-    event = {'attacker':unit1.name, 'defender':unit2.name, 'damage':unit1.atk}
+    event = {'attacker':actor1.name, 'defender':actor2.name, 'damage':actor1.atk}
 
-    unit2.take_damage(unit1.atk)
+    actor2.take_damage(actor1.atk)
     return event
 
 
 # 攻撃対象の選択
-def select_target(attacker, unit1, unit2):
-    if attacker == unit1:
-        return unit2
+def select_target(attacker, actor1, actor2):
+    if attacker == actor1:
+        return actor2
     else:
-        return unit1
+        return actor1
 
 
-def do_attack(attacker, unit1, unit2):
-    enemy = select_target(attacker, unit1, unit2)
+def do_attack(attacker, actor1, actor2):
+    enemy = select_target(attacker, actor1, actor2)
     event = attack(attacker, enemy)
     return event, enemy
 
@@ -83,24 +103,29 @@ def auto_battle(unit1, unit2):
     turn = 0
     logs = []
 
-    action = ActionOrderManager(unit1, unit2)
+    actor1 = CombatState(unit1)
+    actor2 = CombatState(unit2)
+
+    actors = {actor1.id: actor1, actor2.id: actor2}
+
+    action = ActionOrderManager(actors)
 
     while True:
         attacker = action.next_actor()
 
         turn += 1
-        event, enemy = do_attack(attacker, unit1, unit2)
+        event, enemy = do_attack(attacker, actor1, actor2)
         event['turn'] = turn
         logs.append(event)
 
-        if enemy.hp <= 0:
+        if enemy.current_hp <= 0:
             return enemy, logs
 
 
 if __name__ == "__main__":
-    yusha = Unit("勇者", 100, 10, 60)
+    yusha = unit.Unit("勇者", 100, 10, 60)
     yusha.show_status()
-    slime = Unit("スライム", 100, 5, 50)
+    slime = unit.Unit("スライム", 100, 5, 50)
     slime.show_status()
 
     print("バトル開始!\n")
