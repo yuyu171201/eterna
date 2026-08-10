@@ -49,6 +49,10 @@ class ActionOrderManager:
 
         if maxed_actor is not None:
             maxed_actor.ct -= maxed_actor.threshold
+            maxed_actor.threshold += ACTION_COST
+            for actor in self.actors.values():
+                if actor != maxed_actor:
+                    actor.threshold = ACTION_COST
             return maxed_actor
 
         return None

@@ -66,3 +66,52 @@ def test_speed_order_same_tick_to_threshold():
     action.next_actor()
     assert actor1.ct == 200   # 150 * 68 - 10000
     assert actor2.ct == 268   # 151 * 68 - 10000
+
+def test_speed_order_threshold_increase_different_3times_speed():
+    actor1 = CombatState(Unit("勇者", 200, 10, 150))
+    unit1_id = 1
+    actor2 = CombatState(Unit("スライム", 200, 5, 50))
+    unit2_id = 2
+    action = ActionOrderManager({unit1_id: actor1, unit2_id: actor2})
+    action.next_actor()
+    assert actor1.ct == 50    # 150 * 67  - 10000
+    assert actor1.threshold == 20000
+    assert actor2.ct == 3350  # 50  * 67
+    assert actor2.threshold == 10000 
+    action.next_actor()
+    assert actor1.ct == 0     # 150 * 200 - 10000 - 20000
+    assert actor1.threshold == 30000
+    assert actor2.ct == 10000 # 50  * 200
+    assert actor2.threshold == 10000
+    action.next_actor()
+    assert actor1.ct == 150   # 150 * 201 - 30000
+    assert actor1.threshold == 10000
+    assert actor2.ct == 50    # 50  * 201 - 10000
+    assert actor2.threshold == 20000
+
+def test_speed_order_threshold_increase_different_4times_speed():
+    actor1 = CombatState(Unit("勇者", 200, 10, 200))
+    unit1_id = 1
+    actor2 = CombatState(Unit("スライム", 200, 5, 50))
+    unit2_id = 2
+    action = ActionOrderManager({unit1_id: actor1, unit2_id: actor2})
+    action.next_actor()
+    assert actor1.ct == 0     # 200 * 50  - 10000
+    assert actor1.threshold == 20000
+    assert actor2.ct == 2500  # 50  * 50 
+    assert actor2.threshold == 10000
+    action.next_actor()
+    assert actor1.ct == 0     # 200 * 150 - 10000 - 20000
+    assert actor1.threshold == 30000
+    assert actor2.ct == 7500  # 50  * 150
+    assert actor2.threshold == 10000
+    action.next_actor()
+    assert actor1.ct == 10000  # 200 * 200 - 30000
+    assert actor1.threshold == 10000
+    assert actor2.ct == 0      # 50  * 200
+    assert actor2.threshold == 20000
+    action.next_actor()
+    assert actor1.ct == 200    # 200 * 201 - 30000 - 10000
+    assert actor1.threshold == 20000
+    assert actor2.ct == 50     # 50  * 201 - 20000
+    assert actor2.threshold == 10000
