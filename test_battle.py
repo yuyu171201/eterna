@@ -115,3 +115,22 @@ def test_overheat_allows_double_at_4x():
     assert actor1.threshold == 20000
     assert actor2.ct == 50     # 50  * 201 - 20000
     assert actor2.threshold == 10000
+
+def test_overheat_action_order():
+    actor1 = CombatState(Unit("勇者", 200, 10, 60))
+    unit1_id = 1
+    actor2 = CombatState(Unit("スライム", 200, 5, 50))
+    unit2_id = 2
+    action = ActionOrderManager({unit1_id: actor1, unit2_id: actor2})
+    actor = action.next_actor()
+    assert actor == actor1
+    actor = action.next_actor()
+    assert actor == actor2
+    actor = action.next_actor()
+    assert actor == actor1
+    actor = action.next_actor()
+    assert actor == actor2
+    actor = action.next_actor()
+    assert actor == actor1
+    actor = action.next_actor()
+    assert actor == actor2
