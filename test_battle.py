@@ -3,9 +3,9 @@
 from battle import (
     ActionOrderManager,
     CombatState,
-    Unit,
     auto_battle,
 )
+from unit import Unit
 
 
 def test_set_id():
