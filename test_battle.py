@@ -67,7 +67,7 @@ def test_speed_order_same_tick_to_threshold():
     assert actor1.ct == 200   # 150 * 68 - 10000
     assert actor2.ct == 268   # 151 * 68 - 10000
 
-def test_speed_order_threshold_increase_different_3times_speed():
+def test_overheat_allows_double_at_3x():
     actor1 = CombatState(Unit("勇者", 200, 10, 150))
     unit1_id = 1
     actor2 = CombatState(Unit("スライム", 200, 5, 50))
@@ -89,7 +89,7 @@ def test_speed_order_threshold_increase_different_3times_speed():
     assert actor2.ct == 50    # 50  * 201 - 10000
     assert actor2.threshold == 20000
 
-def test_speed_order_threshold_increase_different_4times_speed():
+def test_overheat_allows_double_at_4x():
     actor1 = CombatState(Unit("勇者", 200, 10, 200))
     unit1_id = 1
     actor2 = CombatState(Unit("スライム", 200, 5, 50))
