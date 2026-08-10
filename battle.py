@@ -1,12 +1,19 @@
+from enum import Enum
+
 import unit
 
 BASE_SPEED = 80
 ACTION_COST = 10000
 
+class camp(Enum):
+    PLAYER = 1
+    ENEMY = 2
+
 class CombatState:
-    def __init__(self, unit):
+    def __init__(self, unit, camp=None):
         self.unit = unit
-        
+        self.camp = camp
+
         self.current_hp = unit.max_hp
 
         self.ct = 0
@@ -103,8 +110,8 @@ def auto_battle(unit1, unit2):
     turn = 0
     logs = []
 
-    actor1 = CombatState(unit1)
-    actor2 = CombatState(unit2)
+    actor1 = CombatState(unit1, camp.PLAYER)
+    actor2 = CombatState(unit2, camp.ENEMY)
 
     actors = {actor1.id: actor1, actor2.id: actor2}
 
