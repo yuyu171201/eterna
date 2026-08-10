@@ -15,8 +15,10 @@ class CombatState:
     def take_damage(self, damage):
         self.current_hp = max(self.current_hp - damage, 0)
 
-    def overheat(self):
+    def on_acted(self):
         self.ct -= self.threshold
+
+    def overheat(self):
         self.threshold += ACTION_COST
 
     def cooldown(self):
@@ -57,6 +59,7 @@ class ActionOrderManager:
         if maxed_actor is not None:
             for actor in self.actors.values():
                 if actor == maxed_actor:
+                    actor.on_acted()
                     actor.overheat()
                 else:
                     actor.cooldown()
