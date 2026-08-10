@@ -5,9 +5,9 @@ class Unit:
     id_counter = 0
 
     # 初期化
-    def __init__(self,name , hp, atk, spd, id=None):
+    def __init__(self, name, hp, atk, spd, id=None):
         self.name = name
-        self.hp = hp
+        self.max_hp = hp
         self.atk = atk
         self.spd = spd
         if id is None:
@@ -16,37 +16,60 @@ class Unit:
         else:
             self.id = id
 
-
-    def take_damage(self, damage):
-        self.hp = max(self.hp - damage, 0)
-
     def show_status(self):
         print(f"{self.name} のステータス")
-        print(f"HP: {self.hp}")
+        print(f"HP: {self.max_hp}")
         print(f"ATK: {self.atk}")
         print(f"SPD: {self.spd}")
         print()
 
+class CombatState:
+    def __init__(self, unit):
+        self.unit = unit
+        
+        self.current_hp = unit.max_hp
+
+        self.ct = 0
+        self.threshold = ACTION_COST
+
+    def take_damage(self, damage):
+        self.current_hp = max(self.current_hp - damage, 0)
+
+    @property
+    def atk(self):
+        return self.unit.atk
+
+    @property
+    def speed(self):
+        return self.unit.spd
+
+    @property
+    def name(self):
+        return self.unit.name
+
+    @property
+    def id(self):
+        return self.unit.id
+
 class ActionOrderManager:
-    def __init__(self, units):
-        self.units = units
-        self.ct = {unit: 0 for unit in units}
+    def __init__(self, actors):
+        self.actors = actors
 
     def tick(self):
-        for uid in self.units:
-            self.ct[uid] += self.units[uid].spd
+        for actor in self.actors.values():
+            actor.ct += actor.speed
 
         max_ct = 0
-        max_uid = None
+        maxed_actor = None
 
-        for uid in sorted(self.units.keys()):
-            if self.ct[uid] >= ACTION_COST and self.ct[uid] > max_ct:
-                max_ct = self.ct[uid]
-                max_uid = uid
+        for actor in self.actors.values():
+            if actor.ct >= actor.threshold and actor.ct > max_ct:
+                max_ct = actor.ct
+                maxed_actor = actor
 
-        if max_uid is not None:
-                self.ct[max_uid] -= ACTION_COST
-                return self.units[max_uid]
+        if maxed_actor is not None:
+            maxed_actor.ct -= maxed_actor.threshold
+            return maxed_actor
 
         return None
 
@@ -59,24 +82,24 @@ class ActionOrderManager:
         
 
 # 攻撃処理
-def attack(unit1, unit2):
+def attack(actor1, actor2):
     # 辞書型(攻撃者,　被攻撃者, ダメージ量)
-    event = {'attacker':unit1.name, 'defender':unit2.name, 'damage':unit1.atk}
+    event = {'attacker':actor1.name, 'defender':actor2.name, 'damage':actor1.atk}
 
-    unit2.take_damage(unit1.atk)
+    actor2.take_damage(actor1.atk)
     return event
 
 
 # 攻撃対象の選択
-def select_target(attacker, unit1, unit2):
-    if attacker == unit1:
-        return unit2
+def select_target(attacker, actor1, actor2):
+    if attacker == actor1:
+        return actor2
     else:
-        return unit1
+        return actor1
 
 
-def do_attack(attacker, unit1, unit2):
-    enemy = select_target(attacker, unit1, unit2)
+def do_attack(attacker, actor1, actor2):
+    enemy = select_target(attacker, actor1, actor2)
     event = attack(attacker, enemy)
     return event, enemy
 
@@ -86,19 +109,22 @@ def auto_battle(unit1, unit2):
     turn = 0
     logs = []
 
-    units = {unit1.id: unit1, unit2.id: unit2}
+    actor1 = CombatState(unit1)
+    actor2 = CombatState(unit2)
 
-    action = ActionOrderManager(units)
+    actors = {actor1.id: actor1, actor2.id: actor2}
+
+    action = ActionOrderManager(actors)
 
     while True:
         attacker = action.next_actor()
 
         turn += 1
-        event, enemy = do_attack(attacker, unit1, unit2)
+        event, enemy = do_attack(attacker, actor1, actor2)
         event['turn'] = turn
         logs.append(event)
 
-        if enemy.hp <= 0:
+        if enemy.current_hp <= 0:
             return enemy, logs
 
 

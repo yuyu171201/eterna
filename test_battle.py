@@ -2,6 +2,7 @@
 
 from battle import (
     ActionOrderManager,
+    CombatState,
     Unit,
     auto_battle,
 )
@@ -16,14 +17,14 @@ def test_set_id():
     assert unit3.id == 99
 
 def test_take_damage():
-    unit = Unit("勇者", 20, 10, 100)
-    unit.take_damage(5)
-    assert unit.hp == 15
+    actor = CombatState(Unit("勇者", 20, 10, 100))
+    actor.take_damage(5)
+    assert actor.current_hp == 15
 
 def test_not_minus_hp():
-    unit = Unit("勇者", 20, 10, 100)
-    unit.take_damage(100)
-    assert unit.hp == 0
+    actor = CombatState(Unit("勇者", 20, 10, 100))
+    actor.take_damage(100)
+    assert actor.current_hp == 0
 
 def test_fastest_unit():
     unit1 = Unit("勇者", 20, 10, 100)
@@ -38,32 +39,30 @@ def test_loser():
     assert loser.name == "スライム"
 
 def test_speed_order():
-    unit1 = Unit("勇者", 20, 10, 100)
+    actor1 = CombatState(Unit("勇者", 20, 10, 100))
     unit1_id = 1
-    unit2 = Unit("スライム", 20, 5, 90)
+    actor2 = CombatState(Unit("スライム", 20, 5, 90))
     unit2_id = 2
-    action = ActionOrderManager({unit1_id: unit1, unit2_id: unit2})
-    assert action.ct[unit1_id] == 0
-    assert action.ct[unit2_id] == 0
+    action = ActionOrderManager({unit1_id: actor1, unit2_id: actor2})
+    assert actor1.ct == 0
+    assert actor2.ct == 0
     action.tick()
-    assert action.ct[unit1_id] == 100
-    assert action.ct[unit2_id] == 90
+    assert actor1.ct == 100
+    assert actor2.ct == 90
     for i in range(99):
         action.tick()
-    assert action.ct[unit1_id] == 0
-    assert action.ct[unit2_id] == 9000
+    assert actor1.ct == 0
+    assert actor2.ct == 9000
 
-def test_speed_order2():
-    unit1 = Unit("勇者", 20, 10, 150)
+def test_speed_order_same_tick_to_threshold():
+    actor1 = CombatState(Unit("勇者", 20, 10, 150))
     unit1_id = 1
-    unit2 = Unit("スライム", 20, 5, 151)
+    actor2 = CombatState(Unit("スライム", 20, 5, 151))
     unit2_id = 2
-    action = ActionOrderManager({unit1_id: unit1, unit2_id: unit2})
+    action = ActionOrderManager({unit1_id: actor1, unit2_id: actor2})
     action.next_actor()
-    assert action.ct[unit1_id] == 10050 # 150 * 67
-    assert action.ct[unit2_id] == 117   # 151 * 67 - 10000
+    assert actor1.ct == 10050 # 150 * 67
+    assert actor2.ct == 117   # 151 * 67 - 10000
     action.next_actor()
-    assert action.ct[unit1_id] == 200   # 150 * 68 - 10000
-    assert action.ct[unit2_id] == 268   # 151 * 68 - 10000
-
-
+    assert actor1.ct == 200   # 150 * 68 - 10000
+    assert actor2.ct == 268   # 151 * 68 - 10000
