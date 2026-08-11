@@ -139,8 +139,10 @@ if __name__ == "__main__":
     yusha.show_status()
     slime = Unit("スライム", 100, 5, 50)
     slime.show_status()
+    goblin = Unit("ゴブリン", 40, 15, 70)
+    goblin.show_status()
 
-    units = {yusha: Camp.PLAYER, slime: Camp.ENEMY}
+    units = {yusha: Camp.PLAYER, slime: Camp.ENEMY, goblin: Camp.ENEMY}
 
     print("バトル開始!\n")
 
