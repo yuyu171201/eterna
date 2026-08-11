@@ -121,7 +121,6 @@ def auto_battle(units):
         actors[unit.id] = CombatState(unit, camp=units[unit])
 
     action = ActionOrderManager(actors)
-    print(actors)
 
     while True:
         attacker = action.next_actor()
