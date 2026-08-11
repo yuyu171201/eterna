@@ -117,8 +117,8 @@ def auto_battle(units):
 
     actors = {}
 
-    for unit in units:
-        actors[unit.id] = CombatState(unit, camp=units[unit])
+    for unit, camp in units.items():
+        actors[unit.id] = CombatState(unit, camp=camp)
 
     action = ActionOrderManager(actors)
 
