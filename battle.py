@@ -1,11 +1,12 @@
+import random
 from enum import Enum
 
-import unit
+from unit import Unit
 
 BASE_SPEED = 80
 ACTION_COST = 10000
 
-class camp(Enum):
+class Camp(Enum):
     PLAYER = 1
     ENEMY = 2
 
@@ -92,36 +93,41 @@ def attack(actor1, actor2):
 
 
 # 攻撃対象の選択
-def select_target(attacker, actor1, actor2):
-    if attacker == actor1:
-        return actor2
-    else:
-        return actor1
+def select_target(attacker, actors):
+    enemies = []
+
+    for actor in actors.values():
+        if actor.camp != attacker.camp:
+            enemies.append(actor)
+
+    random.shuffle(enemies)
+    return enemies[0]
 
 
-def do_attack(attacker, actor1, actor2):
-    enemy = select_target(attacker, actor1, actor2)
+def do_attack(attacker, actors):
+    enemy = select_target(attacker, actors)
     event = attack(attacker, enemy)
     return event, enemy
 
 
 # バトルの実行
-def auto_battle(unit1, unit2):
+def auto_battle(units):
     turn = 0
     logs = []
 
-    actor1 = CombatState(unit1, camp.PLAYER)
-    actor2 = CombatState(unit2, camp.ENEMY)
+    actors = {}
 
-    actors = {actor1.id: actor1, actor2.id: actor2}
+    for unit in units:
+        actors[unit.id] = CombatState(unit, camp=units[unit])
 
     action = ActionOrderManager(actors)
+    print(actors)
 
     while True:
         attacker = action.next_actor()
 
         turn += 1
-        event, enemy = do_attack(attacker, actor1, actor2)
+        event, enemy = do_attack(attacker, actors)
         event['turn'] = turn
         logs.append(event)
 
@@ -130,14 +136,16 @@ def auto_battle(unit1, unit2):
 
 
 if __name__ == "__main__":
-    yusha = unit.Unit("勇者", 100, 10, 60)
+    yusha = Unit("勇者", 100, 10, 60)
     yusha.show_status()
-    slime = unit.Unit("スライム", 100, 5, 50)
+    slime = Unit("スライム", 100, 5, 50)
     slime.show_status()
+
+    units = {yusha: Camp.PLAYER, slime: Camp.ENEMY}
 
     print("バトル開始!\n")
 
-    loser, logs = auto_battle(yusha, slime)
+    loser, logs = auto_battle(units)
     for log in logs:
         print(f"turn {log['turn']}: {log['attacker']} は {log['defender']} に {log['damage']} のダメージを与えた!\n")
     print(f"{loser.name} は倒れた!")

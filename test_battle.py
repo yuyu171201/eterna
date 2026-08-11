@@ -29,13 +29,15 @@ def test_not_minus_hp():
 def test_fastest_unit():
     unit1 = Unit("勇者", 20, 10, 100)
     unit2 = Unit("スライム", 20, 5, 90)
-    _, logs = auto_battle(unit1, unit2)
+    units = {unit1: "player", unit2: "enemy"}
+    _, logs = auto_battle(units)
     assert logs[0]['attacker'] == "勇者"
 
 def test_loser():
     unit1 = Unit("勇者", 20, 10, 100)
     unit2 = Unit("スライム", 20, 5, 90)
-    loser, _ = auto_battle(unit1, unit2)
+    units = {unit1: "player", unit2: "enemy"}
+    loser, _ = auto_battle(units)
     assert loser.name == "スライム"
 
 def test_speed_order():
