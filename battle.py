@@ -96,10 +96,10 @@ def attack(actor1, actor2):
 
 
 # 攻撃対象の選択
-def select_target(attacker, actors):
+def select_target(attacker, combatants):
     enemies = []
 
-    for actor in actors.values():
+    for actor in combatants.values():
         if actor.camp != attacker.camp:
             enemies.append(actor)
 
@@ -107,8 +107,8 @@ def select_target(attacker, actors):
     return enemies[0]
 
 
-def do_attack(attacker, actors):
-    enemy = select_target(attacker, actors)
+def do_attack(attacker, combatants):
+    enemy = select_target(attacker, combatants)
     event = attack(attacker, enemy)
     return event, enemy
 
@@ -118,18 +118,18 @@ def auto_battle(units):
     turn = 0
     logs = []
 
-    actors = {}
+    combatants = {}
 
     for unit, camp in units.items():
-        actors[unit.id] = CombatState(unit, camp=camp)
+        combatants[unit.id] = CombatState(unit, camp=camp)
 
-    action = ActionOrderManager(actors)
+    action = ActionOrderManager(combatants)
 
     while True:
         attacker = action.next_actor()
 
         turn += 1
-        event, enemy = do_attack(attacker, actors)
+        event, enemy = do_attack(attacker, combatants)
         event['turn'] = turn
         logs.append(event)
 
