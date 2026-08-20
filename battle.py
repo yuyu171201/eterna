@@ -54,7 +54,7 @@ class ActionOrderManager:
         self.actors = actors
 
     def tick(self):
-        self.alived_actors = [actor for actor in self.actors if actor.is_alive]
+        self.alived_actors = get_alive_actors(self.actors)
 
         for actor in self.actors:
             actor.ct += actor.speed
@@ -84,6 +84,10 @@ class ActionOrderManager:
             if actor is not None:
                 return actor
 
+
+def get_alive_actors(actors):
+    alive_actors = [actor for actor in actors if actor.is_alive]
+    return alive_actors
         
 
 # 攻撃処理
@@ -99,7 +103,7 @@ def attack(actor1, actor2):
 def select_target(attacker, combatants):
     attacker_camp = attacker.camp
 
-    valid_targets = [actor for actor in combatants if actor.camp != attacker_camp and actor.is_alive]
+    valid_targets = get_alive_actors([actor for actor in combatants if actor.camp != attacker_camp])
 
     target = random.choice(valid_targets)
     return target
