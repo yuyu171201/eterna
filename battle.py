@@ -43,10 +43,6 @@ class CombatState:
     @property
     def name(self):
         return self.unit.name
-
-    @property
-    def id(self):
-        return self.unit.id
     
     def __repr__(self):
         return f'{self.__class__.__name__}(unit={self.unit.name}, camp={self.camp})'

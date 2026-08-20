@@ -1,17 +1,11 @@
 class Unit:
-    id_counter = 0
 
     # 初期化
-    def __init__(self, name, hp, atk, spd, id=None):
+    def __init__(self, name, hp, atk, spd):
         self.name = name
         self.max_hp = hp
         self.atk = atk
         self.spd = spd
-        if id is None:
-            Unit.id_counter += 1
-            self.id = Unit.id_counter
-        else:
-            self.id = id
 
     def show_status(self):
         print(f"{self.name} のステータス")
