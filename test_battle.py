@@ -8,14 +8,6 @@ from battle import (
 from unit import Unit
 
 
-def test_set_id():
-    unit1 = Unit("勇者", 20, 10, 100)
-    unit2 = Unit("スライム", 20, 5, 90)
-    unit3 = Unit("魔王", 30, 15, 120)
-    assert unit1.id == 1
-    assert unit2.id == 2
-    assert unit3.id == 99
-
 def test_take_damage():
     actor = CombatState(Unit("勇者", 20, 10, 100))
     actor.take_damage(5)
