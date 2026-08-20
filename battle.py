@@ -56,19 +56,19 @@ class ActionOrderManager:
         self.actors = actors
 
     def tick(self):
-        for actor in self.actors.values():
+        for actor in self.actors:
             actor.ct += actor.speed
 
         max_ct = 0
         maxed_actor = None
 
-        for actor in self.actors.values():
+        for actor in self.actors:
             if actor.ct >= actor.threshold and actor.ct > max_ct:
                 max_ct = actor.ct
                 maxed_actor = actor
 
         if maxed_actor is not None:
-            for actor in self.actors.values():
+            for actor in self.actors:
                 if actor == maxed_actor:
                     actor.on_acted()
                     actor.overheat()
@@ -97,20 +97,18 @@ def attack(actor1, actor2):
 
 # 攻撃対象の選択
 def select_target(attacker, combatants):
-    enemies = []
+    attacker_camp = attacker.camp
 
-    for actor in combatants.values():
-        if actor.camp != attacker.camp:
-            enemies.append(actor)
+    valid_targets = [actor for actor in combatants if actor.camp != attacker_camp]
 
-    random.shuffle(enemies)
-    return enemies[0]
+    target = random.choice(valid_targets)
+    return target
 
 
 def do_attack(attacker, combatants):
-    enemy = select_target(attacker, combatants)
-    event = attack(attacker, enemy)
-    return event, enemy
+    target = select_target(attacker, combatants)
+    event = attack(attacker, target)
+    return event, target
 
 
 # バトルの実行
@@ -118,10 +116,10 @@ def auto_battle(units):
     turn = 0
     logs = []
 
-    combatants = {}
+    combatants = []
 
     for unit, camp in units.items():
-        combatants[unit.id] = CombatState(unit, camp=camp)
+        combatants.append(CombatState(unit, camp=camp))
 
     action = ActionOrderManager(combatants)
 

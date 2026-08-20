@@ -42,10 +42,8 @@ def test_loser():
 
 def test_speed_order():
     actor1 = CombatState(Unit("勇者", 20, 10, 100))
-    unit1_id = 1
     actor2 = CombatState(Unit("スライム", 20, 5, 90))
-    unit2_id = 2
-    action = ActionOrderManager({unit1_id: actor1, unit2_id: actor2})
+    action = ActionOrderManager([actor1, actor2])
     assert actor1.ct == 0
     assert actor2.ct == 0
     action.tick()
@@ -58,10 +56,8 @@ def test_speed_order():
 
 def test_speed_order_same_tick_to_threshold():
     actor1 = CombatState(Unit("勇者", 20, 10, 150))
-    unit1_id = 1
     actor2 = CombatState(Unit("スライム", 20, 5, 151))
-    unit2_id = 2
-    action = ActionOrderManager({unit1_id: actor1, unit2_id: actor2})
+    action = ActionOrderManager([actor1, actor2])
     action.next_actor()
     assert actor1.ct == 10050 # 150 * 67
     assert actor2.ct == 117   # 151 * 67 - 10000
@@ -71,10 +67,8 @@ def test_speed_order_same_tick_to_threshold():
 
 def test_overheat_allows_double_at_3x():
     actor1 = CombatState(Unit("勇者", 200, 10, 150))
-    unit1_id = 1
     actor2 = CombatState(Unit("スライム", 200, 5, 50))
-    unit2_id = 2
-    action = ActionOrderManager({unit1_id: actor1, unit2_id: actor2})
+    action = ActionOrderManager([actor1, actor2])
     action.next_actor()
     assert actor1.ct == 50    # 150 * 67  - 10000
     assert actor1.threshold == 20000
@@ -93,10 +87,8 @@ def test_overheat_allows_double_at_3x():
 
 def test_overheat_allows_double_at_4x():
     actor1 = CombatState(Unit("勇者", 200, 10, 200))
-    unit1_id = 1
     actor2 = CombatState(Unit("スライム", 200, 5, 50))
-    unit2_id = 2
-    action = ActionOrderManager({unit1_id: actor1, unit2_id: actor2})
+    action = ActionOrderManager([actor1, actor2])
     action.next_actor()
     assert actor1.ct == 0     # 200 * 50  - 10000
     assert actor1.threshold == 20000
@@ -120,10 +112,8 @@ def test_overheat_allows_double_at_4x():
 
 def test_overheat_action_order():
     actor1 = CombatState(Unit("勇者", 200, 10, 60))
-    unit1_id = 1
     actor2 = CombatState(Unit("スライム", 200, 5, 50))
-    unit2_id = 2
-    action = ActionOrderManager({unit1_id: actor1, unit2_id: actor2})
+    action = ActionOrderManager([actor1, actor2])
     actor = action.next_actor()
     assert actor == actor1
     actor = action.next_actor()
