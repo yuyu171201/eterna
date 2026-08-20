@@ -85,8 +85,8 @@ class ActionOrderManager:
                 return actor
 
 
-def get_alive_actors(actors):
-    alives = [actor for actor in actors if actor.is_alive]
+def get_alive_actors(combatants):
+    alives = [actor for actor in combatants if actor.is_alive]
     return alives
 
 def get_enemies_of(attacker, combatants):
