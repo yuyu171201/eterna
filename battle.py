@@ -20,6 +20,8 @@ class CombatState:
         self.ct = 0
         self.threshold = ACTION_COST
 
+        self.is_alive = True
+
     def take_damage(self, damage):
         self.current_hp = max(self.current_hp - damage, 0)
 
@@ -52,6 +54,8 @@ class ActionOrderManager:
         self.actors = actors
 
     def tick(self):
+        self.alived_actors = [actor for actor in self.actors if actor.is_alive]
+
         for actor in self.actors:
             actor.ct += actor.speed
 
@@ -95,7 +99,7 @@ def attack(actor1, actor2):
 def select_target(attacker, combatants):
     attacker_camp = attacker.camp
 
-    valid_targets = [actor for actor in combatants if actor.camp != attacker_camp]
+    valid_targets = [actor for actor in combatants if actor.camp != attacker_camp and actor.is_alive]
 
     target = random.choice(valid_targets)
     return target
