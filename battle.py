@@ -85,15 +85,23 @@ class ActionOrderManager:
                 return actor
 
 
-def get_alive_actors(combatants):
+def get_alive_actors(
+    combatants : list[CombatState]
+) -> list[CombatState]:
     alives = [actor for actor in combatants if actor.is_alive]
     return alives
 
-def get_enemies_of(attacker, combatants):
+def get_enemies_of(
+    attacker : CombatState ,
+    combatants : list[CombatState]
+) -> list[CombatState]:
     enemies = [actor for actor in combatants if actor.camp != attacker.camp]
     return enemies
 
-def get_allies_of(attacker, combatants):
+def get_allies_of(
+    attacker : CombatState ,
+    combatants : list[CombatState]
+) -> list[CombatState]:
     allies = [actor for actor in combatants if actor.camp == attacker.camp]
     return allies
         
@@ -108,21 +116,27 @@ def attack(actor1, actor2):
 
 
 # 攻撃対象の選択
-def select_target(attacker, combatants):
+def select_target(
+    attacker : CombatState ,
+    combatants : list[CombatState]
+) -> CombatState:
     valid_targets = get_enemies_of(attacker, get_alive_actors(combatants))
 
     target = random.choice(valid_targets)
     return target
 
 
-def do_attack(attacker, combatants):
+def do_attack(
+    attacker : CombatState ,
+    combatants : list[CombatState]
+):
     target = select_target(attacker, combatants)
     event = attack(attacker, target)
     return event, target
 
 
 # バトルの実行
-def auto_battle(units):
+def auto_battle(units : list[Unit]):
     turn = 0
     logs = []
 
