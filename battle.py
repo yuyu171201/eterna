@@ -86,8 +86,16 @@ class ActionOrderManager:
 
 
 def get_alive_actors(actors):
-    alive_actors = [actor for actor in actors if actor.is_alive]
-    return alive_actors
+    alives = [actor for actor in actors if actor.is_alive]
+    return alives
+
+def get_enemies_of(attacker, combatants):
+    enemies = [actor for actor in combatants if actor.camp != attacker.camp]
+    return enemies
+
+def get_allies_of(attacker, combatants):
+    allies = [actor for actor in combatants if actor.camp == attacker.camp]
+    return allies
         
 
 # 攻撃処理
@@ -101,9 +109,7 @@ def attack(actor1, actor2):
 
 # 攻撃対象の選択
 def select_target(attacker, combatants):
-    attacker_camp = attacker.camp
-
-    valid_targets = get_alive_actors([actor for actor in combatants if actor.camp != attacker_camp])
+    valid_targets = get_enemies_of(attacker, get_alive_actors(combatants))
 
     target = random.choice(valid_targets)
     return target
