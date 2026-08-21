@@ -34,6 +34,9 @@ class CombatState:
     def cooldown(self):
         self.threshold = ACTION_COST
 
+    def dead(self):
+        self.is_alive = False
+
     @property
     def atk(self):
         return self.unit.atk
@@ -148,15 +151,25 @@ def auto_battle(units : list[Unit]):
     action = ActionOrderManager(combatants)
 
     while True:
+        survivors = get_alive_actors(combatants)
+        remain_camps = [actor.camp for actor in survivors]
+        num_camps = len(set(remain_camps))
+
+        if num_camps == 1:
+            return remain_camps[0], logs
+        elif num_camps == 0:
+            return None, logs
+            
+
         attacker = action.next_actor()
 
         turn += 1
-        event, enemy = do_attack(attacker, combatants)
+        event, target = do_attack(attacker, combatants)
         event['turn'] = turn
         logs.append(event)
 
-        if enemy.current_hp <= 0:
-            return enemy, logs
+        if target.current_hp <= 0:
+            target.dead()
 
 
 if __name__ == "__main__":
@@ -171,7 +184,8 @@ if __name__ == "__main__":
 
     print("バトル開始!\n")
 
-    loser, logs = auto_battle(units)
+    win_camp, logs = auto_battle(units)
     for log in logs:
         print(f"turn {log['turn']}: {log['attacker']} は {log['defender']} に {log['damage']} のダメージを与えた!\n")
-    print(f"{loser.name} は倒れた!")
+
+    print(f"{win_camp}陣営が勝利しました。")

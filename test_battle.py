@@ -2,6 +2,7 @@
 
 from battle import (
     ActionOrderManager,
+    Camp,
     CombatState,
     auto_battle,
 )
@@ -25,12 +26,12 @@ def test_fastest_unit():
     _, logs = auto_battle(units)
     assert logs[0]['attacker'] == "勇者"
 
-def test_loser():
+def test_winner():
     unit1 = Unit("勇者", 20, 10, 100)
     unit2 = Unit("スライム", 20, 5, 90)
-    units = {unit1: "player", unit2: "enemy"}
-    loser, _ = auto_battle(units)
-    assert loser.name == "スライム"
+    units = {unit1: Camp.PLAYER, unit2: Camp.ENEMY}
+    winner, _ = auto_battle(units)
+    assert winner == Camp.PLAYER
 
 def test_speed_order():
     actor1 = CombatState(Unit("勇者", 20, 10, 100))
