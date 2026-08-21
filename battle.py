@@ -20,8 +20,6 @@ class CombatState:
         self.ct = 0
         self.threshold = ACTION_COST
 
-        self.is_alive = True
-
     def take_damage(self, damage):
         self.current_hp = max(self.current_hp - damage, 0)
 
@@ -34,8 +32,10 @@ class CombatState:
     def cooldown(self):
         self.threshold = ACTION_COST
 
-    def dead(self):
-        self.is_alive = False
+
+    @property
+    def is_alive(self):
+        return self.current_hp > 0
 
     @property
     def atk(self):
@@ -135,7 +135,7 @@ def do_attack(
 ):
     target = select_target(attacker, combatants)
     event = attack(attacker, target)
-    return event, target
+    return event
 
 
 # バトルの実行
@@ -164,12 +164,9 @@ def auto_battle(units : list[Unit]):
         attacker = action.next_actor()
 
         turn += 1
-        event, target = do_attack(attacker, combatants)
+        event = do_attack(attacker, combatants)
         event['turn'] = turn
         logs.append(event)
-
-        if target.current_hp <= 0:
-            target.dead()
 
 
 if __name__ == "__main__":
