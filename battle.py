@@ -59,19 +59,19 @@ class ActionOrderManager:
     def tick(self):
         self.alived_actors = get_alive_actors(self.actors)
 
-        for actor in self.actors:
+        for actor in self.alived_actors:
             actor.ct += actor.speed
 
         max_ct = 0
         maxed_actor = None
 
-        for actor in self.actors:
+        for actor in self.alived_actors:
             if actor.ct >= actor.threshold and actor.ct > max_ct:
                 max_ct = actor.ct
                 maxed_actor = actor
 
         if maxed_actor is not None:
-            for actor in self.actors:
+            for actor in self.alived_actors:
                 if actor == maxed_actor:
                     actor.on_acted()
                     actor.overheat()
