@@ -24,7 +24,7 @@ def test_not_minus_hp():
 def test_fastest_unit():
     unit1 = Unit("勇者", 20, 10, 100)
     unit2 = Unit("スライム", 20, 5, 90)
-    entries = [[unit1, "player"], [unit2, "enemy"]]
+    entries = [[unit1, Camp.PLAYER], [unit2, Camp.ENEMY]]
     _, logs = auto_battle(entries)
     assert logs[0]['attacker'] == "勇者"
 
@@ -148,3 +148,14 @@ def test_get_alives():
     combatants = [alive1, alive2, death1]
     alives = get_alive_actors(combatants)
     assert len(alives) == 2
+
+def test_dead_actor_action_order():
+    alive1_player = CombatState(Unit('player1', 10, 1, 1 ), Camp.PLAYER)
+    alive2_enemy  = CombatState(Unit('enemy1',  10, 1, 1 ), Camp.ENEMY)
+    death1_enemy  = CombatState(Unit('enemy2',  0 , 1, 10), Camp.ENEMY)
+
+    combatants = [alive1_player, alive2_enemy, death1_enemy]
+    action = ActionOrderManager(combatants)
+    for _ in range(10):
+        attacker = action.next_actor()
+        assert attacker != death1_enemy
