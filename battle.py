@@ -139,13 +139,13 @@ def do_attack(
 
 
 # バトルの実行
-def auto_battle(units : list[Unit]):
+def auto_battle(entries : list[tuple[Unit, Camp]]):
     turn = 0
     logs = []
 
     combatants = []
 
-    for unit, camp in units.items():
+    for unit, camp in entries:
         combatants.append(CombatState(unit, camp=camp))
 
     action = ActionOrderManager(combatants)
@@ -177,11 +177,11 @@ if __name__ == "__main__":
     goblin = Unit("ゴブリン", 40, 15, 70)
     goblin.show_status()
 
-    units = {yusha: Camp.PLAYER, slime: Camp.ENEMY, goblin: Camp.ENEMY}
+    entries = [[yusha, Camp.PLAYER], [slime, Camp.ENEMY], [goblin, Camp.ENEMY]]
 
     print("バトル開始!\n")
 
-    win_camp, logs = auto_battle(units)
+    win_camp, logs = auto_battle(entries)
     for log in logs:
         print(f"turn {log['turn']}: {log['attacker']} は {log['defender']} に {log['damage']} のダメージを与えた!\n")
 
