@@ -5,6 +5,7 @@ from battle import (
     Camp,
     CombatState,
     auto_battle,
+    get_enemies_of,
 )
 from unit import Unit
 
@@ -119,3 +120,12 @@ def test_overheat_action_order():
     assert actor == actor1
     actor = action.next_actor()
     assert actor == actor2
+
+def test_get_enemies():
+    player1 = CombatState(Unit('player1', 1, 1, 1), Camp.PLAYER)
+    enemy1  = CombatState(Unit('enemy1', 1, 1, 1),  Camp.ENEMY)
+    enemy2  = CombatState(Unit('enemy2', 1, 1, 1),  Camp.ENEMY)
+
+    combatants = [player1, enemy1, enemy2]
+    enemies = get_enemies_of(player1, combatants)
+    assert len(enemies) == 2
