@@ -122,7 +122,7 @@ def test_overheat_action_order():
     actor = action.next_actor()
     assert actor == actor2
 
-def test_get_enemies():
+def test_get_enemies_player_to_enemy():
     player1 = CombatState(Unit('player1', 1, 1, 1), Camp.PLAYER)
     enemy1  = CombatState(Unit('enemy1', 1, 1, 1),  Camp.ENEMY)
     enemy2  = CombatState(Unit('enemy2', 1, 1, 1),  Camp.ENEMY)
@@ -130,6 +130,15 @@ def test_get_enemies():
     combatants = [player1, enemy1, enemy2]
     enemies = get_enemies_of(player1, combatants)
     assert len(enemies) == 2
+
+def test_get_enemies_enemy_to_player():
+    player1 = CombatState(Unit('player1', 1, 1, 1), Camp.PLAYER)
+    enemy1  = CombatState(Unit('enemy1', 1, 1, 1),  Camp.ENEMY)
+    enemy2  = CombatState(Unit('enemy2', 1, 1, 1),  Camp.ENEMY)
+
+    combatants = [player1, enemy1, enemy2]
+    enemies = get_enemies_of(enemy1, combatants)
+    assert len(enemies) == 1
 
 def test_get_alives():
     alive1 = CombatState(Unit('alive1', 1, 1, 1))
