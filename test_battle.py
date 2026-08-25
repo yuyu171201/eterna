@@ -5,6 +5,7 @@ from battle import (
     Camp,
     CombatState,
     auto_battle,
+    get_alive_actors,
     get_enemies_of,
 )
 from unit import Unit
@@ -129,3 +130,12 @@ def test_get_enemies():
     combatants = [player1, enemy1, enemy2]
     enemies = get_enemies_of(player1, combatants)
     assert len(enemies) == 2
+
+def test_get_alives():
+    alive1 = CombatState(Unit('alive1', 1, 1, 1))
+    alive2 = CombatState(Unit('alive2', 1, 1, 1))
+    death1 = CombatState(Unit('death1', 0, 1, 1))
+
+    combatants = [alive1, alive2, death1]
+    alives = get_alive_actors(combatants)
+    assert len(alives) == 2
