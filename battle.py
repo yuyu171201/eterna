@@ -101,6 +101,9 @@ def get_enemies_of(
     enemies = [actor for actor in combatants if actor.camp != attacker.camp]
     return enemies
 
+def get_valid_enemies(attacker, combatants):
+    return get_enemies_of(attacker, get_alive_actors(combatants))
+
 def get_allies_of(
     attacker : CombatState ,
     combatants : list[CombatState]
@@ -127,6 +130,26 @@ def select_target(
 
     target = random.choice(valid_targets)
     return target
+
+
+# 攻撃対象の入力での選択
+def input_target(attacker, combatants):
+    enemies = get_valid_enemies(attacker, combatants)
+    for i, enemy in enumerate(enemies):
+        print(f"{i} --> {enemy.name}")    
+
+    while True:
+        try:
+            target_idx = int(input('対象を選択して : '))
+        except ValueError:
+            print('数値で入力してください')
+            continue
+
+        if target_idx >= 0 and target_idx < len(enemies):
+            target = enemies[target_idx]
+            return target
+        else:
+            print('不適切な入力です')
 
 
 def do_attack(
