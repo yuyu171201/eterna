@@ -101,8 +101,12 @@ def get_enemies_of(
     enemies = [actor for actor in combatants if actor.camp != attacker.camp]
     return enemies
 
-def get_valid_enemies(attacker, combatants):
-    return get_enemies_of(attacker, get_alive_actors(combatants))
+def get_valid_enemies(
+    attacker : CombatState ,
+    combatants : list[CombatState]
+) -> list[CombatState]:
+    valid_enemies = get_enemies_of(attacker, get_alive_actors(combatants))
+    return valid_enemies
 
 def get_allies_of(
     attacker : CombatState ,
@@ -113,11 +117,14 @@ def get_allies_of(
         
 
 # 攻撃処理
-def attack(actor1, actor2):
+def attack(
+    attacker : CombatState ,
+    defender : CombatState
+):
     # 辞書型(攻撃者,　被攻撃者, ダメージ量)
-    event = {'attacker':actor1.name, 'defender':actor2.name, 'damage':actor1.atk}
+    event = {'attacker':attacker.name, 'defender':defender.name, 'damage':attacker.atk}
 
-    actor2.take_damage(actor1.atk)
+    defender.take_damage(attacker.atk)
     return event
 
 
@@ -133,7 +140,10 @@ def select_target(
 
 
 # 攻撃対象の入力での選択
-def input_target(attacker, combatants):
+def input_target(
+    attacker : CombatState ,
+    combatants : list[CombatState]
+) -> CombatState:
     enemies = get_valid_enemies(attacker, combatants)
     for i, enemy in enumerate(enemies):
         print(f"{i} --> {enemy.name}")    
