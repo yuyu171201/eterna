@@ -114,18 +114,6 @@ def get_allies_of(
 ) -> list[CombatState]:
     allies = [actor for actor in combatants if actor.camp == attacker.camp]
     return allies
-        
-
-# 攻撃処理
-def attack(
-    attacker : CombatState ,
-    defender : CombatState
-):
-    # 辞書型(攻撃者,　被攻撃者, ダメージ量)
-    event = {'attacker':attacker.name, 'defender':defender.name, 'damage':attacker.atk}
-
-    defender.take_damage(attacker.atk)
-    return event
 
 
 # 攻撃対象の選択
@@ -160,6 +148,18 @@ def input_target(
             return target
         else:
             print('不適切な入力です')
+
+
+# 攻撃処理
+def attack(
+    attacker : CombatState ,
+    defender : CombatState
+):
+    # 辞書型(攻撃者,　被攻撃者, ダメージ量)
+    event = {'attacker':attacker.name, 'defender':defender.name, 'damage':attacker.atk}
+
+    defender.take_damage(attacker.atk)
+    return event
 
 
 def do_attack(
