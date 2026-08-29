@@ -168,7 +168,7 @@ def attack(
 # バトルの実行
 def auto_battle(
     entries : list[tuple[Unit, Camp]],
-    targeting_function = select_target
+    choose_target = select_target
 ):
     turn = 0
     logs = []
@@ -195,7 +195,7 @@ def auto_battle(
         attacker = action.next_actor()
 
         if attacker.camp == Camp.PLAYER:
-            target = targeting_function(attacker, combatants)
+            target = choose_target(attacker, combatants)
         else:
             target = select_target(attacker, combatants)
 
