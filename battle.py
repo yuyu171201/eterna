@@ -221,4 +221,10 @@ if __name__ == "__main__":
     for log in logs:
         print(f"turn {log['turn']}: {log['attacker']} は {log['defender']} に {log['damage']} のダメージを与えた!\n")
 
-    print(f"{win_camp}陣営が勝利しました。")
+    match win_camp:
+        case Camp.PLAYER:
+            winner = '自'
+        case Camp.ENEMY:
+            winner = '敵'
+
+    print(f"{winner}陣営が勝利しました。")
