@@ -132,6 +132,7 @@ def input_target(
     attacker : CombatState ,
     combatants : list[CombatState]
 ) -> CombatState:
+    print(f'{attacker.name} の攻撃')
     enemies = get_valid_enemies(attacker, combatants)
     for i, enemy in enumerate(enemies):
         print(f"{i} --> {enemy.name}")    
@@ -145,9 +146,11 @@ def input_target(
 
         if target_idx >= 0 and target_idx < len(enemies):
             target = enemies[target_idx]
+            print()
             return target
         else:
             print('不適切な入力です')
+            print()
 
 
 # 攻撃処理
@@ -164,15 +167,19 @@ def attack(
 
 def do_attack(
     attacker : CombatState ,
-    combatants : list[CombatState]
+    combatants : list[CombatState], 
+    targeting_function
 ):
-    target = select_target(attacker, combatants)
+    target = targeting_function(attacker, combatants)
     event = attack(attacker, target)
     return event
 
 
 # バトルの実行
-def auto_battle(entries : list[tuple[Unit, Camp]]):
+def auto_battle(
+    entries : list[tuple[Unit, Camp]],
+    targeting_function = select_target
+):
     turn = 0
     logs = []
 
@@ -192,12 +199,18 @@ def auto_battle(entries : list[tuple[Unit, Camp]]):
             return remain_camps[0], logs
         elif num_camps == 0:
             return None, logs
+        
+        turn += 1
             
-
         attacker = action.next_actor()
 
-        turn += 1
-        event = do_attack(attacker, combatants)
+        if attacker.camp == Camp.PLAYER:
+            target = targeting_function(attacker, combatants)
+        else:
+            target = select_target(attacker, combatants)
+            
+        event = attack(attacker, target)
+
         event['turn'] = turn
         logs.append(event)
 
@@ -214,7 +227,7 @@ if __name__ == "__main__":
 
     print("バトル開始!\n")
 
-    win_camp, logs = auto_battle(entries)
+    win_camp, logs = auto_battle(entries, input_target)
     for log in logs:
         print(f"turn {log['turn']}: {log['attacker']} は {log['defender']} に {log['damage']} のダメージを与えた!\n")
 
