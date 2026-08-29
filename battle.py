@@ -165,16 +165,6 @@ def attack(
     return event
 
 
-def do_attack(
-    attacker : CombatState ,
-    combatants : list[CombatState], 
-    targeting_function
-):
-    target = targeting_function(attacker, combatants)
-    event = attack(attacker, target)
-    return event
-
-
 # バトルの実行
 def auto_battle(
     entries : list[tuple[Unit, Camp]],
@@ -208,7 +198,7 @@ def auto_battle(
             target = targeting_function(attacker, combatants)
         else:
             target = select_target(attacker, combatants)
-            
+
         event = attack(attacker, target)
 
         event['turn'] = turn
