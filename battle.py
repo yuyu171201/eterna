@@ -10,7 +10,7 @@ class Camp(Enum):
     PLAYER = 1
     ENEMY = 2
 
-class CombatState:
+class BattleEltena:
     def __init__(self, master, camp=None):
         self.master = master
         self.camp = camp
@@ -89,38 +89,38 @@ class ActionOrderManager:
 
 
 def get_alive_actors(
-    combatants : list[CombatState]
-) -> list[CombatState]:
+    combatants : list[BattleEltena]
+) -> list[BattleEltena]:
     alives = [actor for actor in combatants if actor.is_alive]
     return alives
 
 def get_enemies_of(
-    attacker : CombatState ,
-    combatants : list[CombatState]
-) -> list[CombatState]:
+    attacker : BattleEltena ,
+    combatants : list[BattleEltena]
+) -> list[BattleEltena]:
     enemies = [actor for actor in combatants if actor.camp != attacker.camp]
     return enemies
 
 def get_valid_enemies(
-    attacker : CombatState ,
-    combatants : list[CombatState]
-) -> list[CombatState]:
+    attacker : BattleEltena ,
+    combatants : list[BattleEltena]
+) -> list[BattleEltena]:
     valid_enemies = get_enemies_of(attacker, get_alive_actors(combatants))
     return valid_enemies
 
 def get_allies_of(
-    attacker : CombatState ,
-    combatants : list[CombatState]
-) -> list[CombatState]:
+    attacker : BattleEltena ,
+    combatants : list[BattleEltena]
+) -> list[BattleEltena]:
     allies = [actor for actor in combatants if actor.camp == attacker.camp]
     return allies
 
 
 # 攻撃対象の選択
 def select_target(
-    attacker : CombatState ,
-    combatants : list[CombatState]
-) -> CombatState:
+    attacker : BattleEltena ,
+    combatants : list[BattleEltena]
+) -> BattleEltena:
     valid_targets = get_enemies_of(attacker, get_alive_actors(combatants))
 
     target = random.choice(valid_targets)
@@ -129,9 +129,9 @@ def select_target(
 
 # 攻撃対象の入力での選択
 def input_target(
-    attacker : CombatState ,
-    combatants : list[CombatState]
-) -> CombatState:
+    attacker : BattleEltena ,
+    combatants : list[BattleEltena]
+) -> BattleEltena:
     print(f'{attacker.name} の攻撃')
     enemies = get_valid_enemies(attacker, combatants)
     for i, enemy in enumerate(enemies):
@@ -155,8 +155,8 @@ def input_target(
 
 # 攻撃処理
 def attack(
-    attacker : CombatState ,
-    defender : CombatState
+    attacker : BattleEltena ,
+    defender : BattleEltena
 ):
     # 辞書型(攻撃者,　被攻撃者, ダメージ量)
     event = {'attacker':attacker.name, 'defender':defender.name, 'damage':attacker.atk}
@@ -176,7 +176,7 @@ def auto_battle(
     combatants = []
 
     for master, camp in entries:
-        combatants.append(CombatState(master, camp=camp))
+        combatants.append(BattleEltena(master, camp=camp))
 
     action = ActionOrderManager(combatants)
 
