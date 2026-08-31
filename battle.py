@@ -11,11 +11,11 @@ class Camp(Enum):
     ENEMY = 2
 
 class CombatState:
-    def __init__(self, unit, camp=None):
-        self.unit = unit
+    def __init__(self, master, camp=None):
+        self.master = master
         self.camp = camp
 
-        self.current_hp = unit.max_hp
+        self.current_hp = master.max_hp
 
         self.ct = 0
         self.threshold = ACTION_COST
@@ -39,18 +39,18 @@ class CombatState:
 
     @property
     def atk(self):
-        return self.unit.atk
+        return self.master.atk
 
     @property
     def speed(self):
-        return self.unit.spd
+        return self.master.spd
 
     @property
     def name(self):
-        return self.unit.name
+        return self.master.name
     
     def __repr__(self):
-        return f'{self.__class__.__name__}(unit={self.unit.name}, camp={self.camp})'
+        return f'{self.__class__.__name__}(master={self.master.name}, camp={self.camp})'
 
 class ActionOrderManager:
     def __init__(self, actors):
@@ -175,8 +175,8 @@ def auto_battle(
 
     combatants = []
 
-    for unit, camp in entries:
-        combatants.append(CombatState(unit, camp=camp))
+    for master, camp in entries:
+        combatants.append(CombatState(master, camp=camp))
 
     action = ActionOrderManager(combatants)
 
