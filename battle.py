@@ -1,7 +1,7 @@
 import random
 from enum import Enum
 
-from unit import Unit
+from unit import EltenaMaster
 
 BASE_SPEED = 80
 ACTION_COST = 10000
@@ -167,7 +167,7 @@ def attack(
 
 # バトルの実行
 def auto_battle(
-    entries : list[tuple[Unit, Camp]],
+    entries : list[tuple[EltenaMaster, Camp]],
     choose_target = select_target
 ):
     turn = 0
@@ -206,11 +206,11 @@ def auto_battle(
 
 
 if __name__ == "__main__":
-    yusha = Unit("勇者", 100, 10, 60)
+    yusha = EltenaMaster("勇者", 100, 10, 60)
     yusha.show_status()
-    slime = Unit("スライム", 100, 5, 50)
+    slime = EltenaMaster("スライム", 100, 5, 50)
     slime.show_status()
-    goblin = Unit("ゴブリン", 40, 15, 70)
+    goblin = EltenaMaster("ゴブリン", 40, 15, 70)
     goblin.show_status()
 
     entries = [[yusha, Camp.PLAYER], [slime, Camp.ENEMY], [goblin, Camp.ENEMY]]
