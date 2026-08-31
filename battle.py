@@ -1,7 +1,7 @@
 import random
 from enum import Enum
 
-from unit import EltenaMaster
+from eltena_master import EltenaMaster
 
 BASE_SPEED = 80
 ACTION_COST = 10000

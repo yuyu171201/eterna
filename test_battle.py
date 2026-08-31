@@ -8,7 +8,7 @@ from battle import (
     get_alive_actors,
     get_enemies_of,
 )
-from unit import EltenaMaster
+from eltena_master import EltenaMaster
 
 
 def test_take_damage():
