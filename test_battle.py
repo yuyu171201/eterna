@@ -21,17 +21,17 @@ def test_not_minus_hp():
     actor.take_damage(100)
     assert actor.current_hp == 0
 
-def test_fastest_unit():
-    unit1 = EltenaMaster("勇者", 20, 10, 100)
-    unit2 = EltenaMaster("スライム", 20, 5, 90)
-    entries = [[unit1, Camp.PLAYER], [unit2, Camp.ENEMY]]
+def test_fastest_eltana_acts_first():
+    fast = EltenaMaster("勇者", 20, 10, 100)
+    late = EltenaMaster("スライム", 20, 5, 90)
+    entries = [[fast, Camp.PLAYER], [late, Camp.ENEMY]]
     _, logs = auto_battle(entries)
     assert logs[0]['attacker'] == "勇者"
 
 def test_winner_camp():
-    unit1 = EltenaMaster("勇者", 20, 10, 100)
-    unit2 = EltenaMaster("スライム", 20, 5, 90)
-    entries = [[unit1, Camp.PLAYER], [unit2, Camp.ENEMY]]
+    win  = EltenaMaster("勇者", 20, 10, 100)
+    lose = EltenaMaster("スライム", 20, 5, 90)
+    entries = [[win, Camp.PLAYER], [lose, Camp.ENEMY]]
     winner, _ = auto_battle(entries)
     assert winner == Camp.PLAYER
 
