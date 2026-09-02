@@ -3,7 +3,6 @@ from enum import Enum
 
 from eltena_master import EltenaMaster
 
-BASE_SPEED = 80
 ACTION_COST = 10000
 
 class Camp(Enum):
