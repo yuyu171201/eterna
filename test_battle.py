@@ -21,7 +21,7 @@ def test_not_minus_hp():
     actor.take_damage(100)
     assert actor.current_hp == 0
 
-def test_fastest_eltana_acts_first():
+def test_fastest_eltena_acts_first():
     fast = EltenaMaster("勇者", 20, 10, 100)
     late = EltenaMaster("スライム", 20, 5, 90)
     entries = [[fast, Camp.PLAYER], [late, Camp.ENEMY]]
