@@ -1,4 +1,4 @@
-class Unit:
+class EltenaMaster:
 
     # 初期化
     def __init__(self, name, hp, atk, spd):

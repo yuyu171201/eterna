@@ -1,7 +1,7 @@
 import random
 from enum import Enum
 
-from unit import Unit
+from eltena_master import EltenaMaster
 
 BASE_SPEED = 80
 ACTION_COST = 10000
@@ -10,12 +10,12 @@ class Camp(Enum):
     PLAYER = 1
     ENEMY = 2
 
-class CombatState:
-    def __init__(self, unit, camp=None):
-        self.unit = unit
+class BattleEltena:
+    def __init__(self, master, camp=None):
+        self.master = master
         self.camp = camp
 
-        self.current_hp = unit.max_hp
+        self.current_hp = master.max_hp
 
         self.ct = 0
         self.threshold = ACTION_COST
@@ -39,18 +39,18 @@ class CombatState:
 
     @property
     def atk(self):
-        return self.unit.atk
+        return self.master.atk
 
     @property
     def speed(self):
-        return self.unit.spd
+        return self.master.spd
 
     @property
     def name(self):
-        return self.unit.name
+        return self.master.name
     
     def __repr__(self):
-        return f'{self.__class__.__name__}(unit={self.unit.name}, camp={self.camp})'
+        return f'{self.__class__.__name__}(master={self.master.name}, camp={self.camp})'
 
 class ActionOrderManager:
     def __init__(self, actors):
@@ -89,38 +89,38 @@ class ActionOrderManager:
 
 
 def get_alive_actors(
-    combatants : list[CombatState]
-) -> list[CombatState]:
+    combatants : list[BattleEltena]
+) -> list[BattleEltena]:
     alives = [actor for actor in combatants if actor.is_alive]
     return alives
 
 def get_enemies_of(
-    attacker : CombatState ,
-    combatants : list[CombatState]
-) -> list[CombatState]:
+    attacker : BattleEltena ,
+    combatants : list[BattleEltena]
+) -> list[BattleEltena]:
     enemies = [actor for actor in combatants if actor.camp != attacker.camp]
     return enemies
 
 def get_valid_enemies(
-    attacker : CombatState ,
-    combatants : list[CombatState]
-) -> list[CombatState]:
+    attacker : BattleEltena ,
+    combatants : list[BattleEltena]
+) -> list[BattleEltena]:
     valid_enemies = get_enemies_of(attacker, get_alive_actors(combatants))
     return valid_enemies
 
 def get_allies_of(
-    attacker : CombatState ,
-    combatants : list[CombatState]
-) -> list[CombatState]:
+    attacker : BattleEltena ,
+    combatants : list[BattleEltena]
+) -> list[BattleEltena]:
     allies = [actor for actor in combatants if actor.camp == attacker.camp]
     return allies
 
 
 # 攻撃対象の選択
 def select_target(
-    attacker : CombatState ,
-    combatants : list[CombatState]
-) -> CombatState:
+    attacker : BattleEltena ,
+    combatants : list[BattleEltena]
+) -> BattleEltena:
     valid_targets = get_enemies_of(attacker, get_alive_actors(combatants))
 
     target = random.choice(valid_targets)
@@ -129,9 +129,9 @@ def select_target(
 
 # 攻撃対象の入力での選択
 def input_target(
-    attacker : CombatState ,
-    combatants : list[CombatState]
-) -> CombatState:
+    attacker : BattleEltena ,
+    combatants : list[BattleEltena]
+) -> BattleEltena:
     print(f'{attacker.name} の攻撃')
     enemies = get_valid_enemies(attacker, combatants)
     for i, enemy in enumerate(enemies):
@@ -155,8 +155,8 @@ def input_target(
 
 # 攻撃処理
 def attack(
-    attacker : CombatState ,
-    defender : CombatState
+    attacker : BattleEltena ,
+    defender : BattleEltena
 ):
     # 辞書型(攻撃者,　被攻撃者, ダメージ量)
     event = {'attacker':attacker.name, 'defender':defender.name, 'damage':attacker.atk}
@@ -167,7 +167,7 @@ def attack(
 
 # バトルの実行
 def auto_battle(
-    entries : list[tuple[Unit, Camp]],
+    entries : list[tuple[EltenaMaster, Camp]],
     choose_target = select_target
 ):
     turn = 0
@@ -175,8 +175,8 @@ def auto_battle(
 
     combatants = []
 
-    for unit, camp in entries:
-        combatants.append(CombatState(unit, camp=camp))
+    for master, camp in entries:
+        combatants.append(BattleEltena(master, camp=camp))
 
     action = ActionOrderManager(combatants)
 
@@ -206,11 +206,11 @@ def auto_battle(
 
 
 if __name__ == "__main__":
-    yusha = Unit("勇者", 100, 10, 60)
+    yusha = EltenaMaster("勇者", 100, 10, 60)
     yusha.show_status()
-    slime = Unit("スライム", 100, 5, 50)
+    slime = EltenaMaster("スライム", 100, 5, 50)
     slime.show_status()
-    goblin = Unit("ゴブリン", 40, 15, 70)
+    goblin = EltenaMaster("ゴブリン", 40, 15, 70)
     goblin.show_status()
 
     entries = [[yusha, Camp.PLAYER], [slime, Camp.ENEMY], [goblin, Camp.ENEMY]]

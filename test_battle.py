@@ -2,42 +2,42 @@
 
 from battle import (
     ActionOrderManager,
+    BattleEltena,
     Camp,
-    CombatState,
     auto_battle,
     get_alive_actors,
     get_enemies_of,
 )
-from unit import Unit
+from eltena_master import EltenaMaster
 
 
 def test_take_damage():
-    actor = CombatState(Unit("勇者", 20, 10, 100))
+    actor = BattleEltena(EltenaMaster("勇者", 20, 10, 100))
     actor.take_damage(5)
     assert actor.current_hp == 15
 
 def test_not_minus_hp():
-    actor = CombatState(Unit("勇者", 20, 10, 100))
+    actor = BattleEltena(EltenaMaster("勇者", 20, 10, 100))
     actor.take_damage(100)
     assert actor.current_hp == 0
 
-def test_fastest_unit():
-    unit1 = Unit("勇者", 20, 10, 100)
-    unit2 = Unit("スライム", 20, 5, 90)
-    entries = [[unit1, Camp.PLAYER], [unit2, Camp.ENEMY]]
+def test_fastest_eltena_acts_first():
+    fast = EltenaMaster("勇者", 20, 10, 100)
+    late = EltenaMaster("スライム", 20, 5, 90)
+    entries = [[fast, Camp.PLAYER], [late, Camp.ENEMY]]
     _, logs = auto_battle(entries)
     assert logs[0]['attacker'] == "勇者"
 
 def test_winner_camp():
-    unit1 = Unit("勇者", 20, 10, 100)
-    unit2 = Unit("スライム", 20, 5, 90)
-    entries = [[unit1, Camp.PLAYER], [unit2, Camp.ENEMY]]
+    win  = EltenaMaster("勇者", 20, 10, 100)
+    lose = EltenaMaster("スライム", 20, 5, 90)
+    entries = [[win, Camp.PLAYER], [lose, Camp.ENEMY]]
     winner, _ = auto_battle(entries)
     assert winner == Camp.PLAYER
 
 def test_speed_order():
-    actor1 = CombatState(Unit("勇者", 20, 10, 100))
-    actor2 = CombatState(Unit("スライム", 20, 5, 90))
+    actor1 = BattleEltena(EltenaMaster("勇者", 20, 10, 100))
+    actor2 = BattleEltena(EltenaMaster("スライム", 20, 5, 90))
     action = ActionOrderManager([actor1, actor2])
     assert actor1.ct == 0
     assert actor2.ct == 0
@@ -50,8 +50,8 @@ def test_speed_order():
     assert actor2.ct == 9000
 
 def test_speed_order_same_tick_to_threshold():
-    actor1 = CombatState(Unit("勇者", 20, 10, 150))
-    actor2 = CombatState(Unit("スライム", 20, 5, 151))
+    actor1 = BattleEltena(EltenaMaster("勇者", 20, 10, 150))
+    actor2 = BattleEltena(EltenaMaster("スライム", 20, 5, 151))
     action = ActionOrderManager([actor1, actor2])
     action.next_actor()
     assert actor1.ct == 10050 # 150 * 67
@@ -61,8 +61,8 @@ def test_speed_order_same_tick_to_threshold():
     assert actor2.ct == 268   # 151 * 68 - 10000
 
 def test_overheat_allows_double_at_3x():
-    actor1 = CombatState(Unit("勇者", 200, 10, 150))
-    actor2 = CombatState(Unit("スライム", 200, 5, 50))
+    actor1 = BattleEltena(EltenaMaster("勇者", 200, 10, 150))
+    actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 50))
     action = ActionOrderManager([actor1, actor2])
     action.next_actor()
     assert actor1.ct == 50    # 150 * 67  - 10000
@@ -81,8 +81,8 @@ def test_overheat_allows_double_at_3x():
     assert actor2.threshold == 20000
 
 def test_overheat_allows_double_at_4x():
-    actor1 = CombatState(Unit("勇者", 200, 10, 200))
-    actor2 = CombatState(Unit("スライム", 200, 5, 50))
+    actor1 = BattleEltena(EltenaMaster("勇者", 200, 10, 200))
+    actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 50))
     action = ActionOrderManager([actor1, actor2])
     action.next_actor()
     assert actor1.ct == 0     # 200 * 50  - 10000
@@ -106,8 +106,8 @@ def test_overheat_allows_double_at_4x():
     assert actor2.threshold == 10000
 
 def test_overheat_action_order():
-    actor1 = CombatState(Unit("勇者", 200, 10, 60))
-    actor2 = CombatState(Unit("スライム", 200, 5, 50))
+    actor1 = BattleEltena(EltenaMaster("勇者", 200, 10, 60))
+    actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 50))
     action = ActionOrderManager([actor1, actor2])
     actor = action.next_actor()
     assert actor == actor1
@@ -123,36 +123,36 @@ def test_overheat_action_order():
     assert actor == actor2
 
 def test_get_enemies_player_to_enemy():
-    player1 = CombatState(Unit('player1', 1, 1, 1), Camp.PLAYER)
-    enemy1  = CombatState(Unit('enemy1', 1, 1, 1),  Camp.ENEMY)
-    enemy2  = CombatState(Unit('enemy2', 1, 1, 1),  Camp.ENEMY)
+    player1 = BattleEltena(EltenaMaster('player1', 1, 1, 1), Camp.PLAYER)
+    enemy1  = BattleEltena(EltenaMaster('enemy1', 1, 1, 1),  Camp.ENEMY)
+    enemy2  = BattleEltena(EltenaMaster('enemy2', 1, 1, 1),  Camp.ENEMY)
 
     combatants = [player1, enemy1, enemy2]
     enemies = get_enemies_of(player1, combatants)
     assert len(enemies) == 2
 
 def test_get_enemies_enemy_to_player():
-    player1 = CombatState(Unit('player1', 1, 1, 1), Camp.PLAYER)
-    enemy1  = CombatState(Unit('enemy1', 1, 1, 1),  Camp.ENEMY)
-    enemy2  = CombatState(Unit('enemy2', 1, 1, 1),  Camp.ENEMY)
+    player1 = BattleEltena(EltenaMaster('player1', 1, 1, 1), Camp.PLAYER)
+    enemy1  = BattleEltena(EltenaMaster('enemy1', 1, 1, 1),  Camp.ENEMY)
+    enemy2  = BattleEltena(EltenaMaster('enemy2', 1, 1, 1),  Camp.ENEMY)
 
     combatants = [player1, enemy1, enemy2]
     enemies = get_enemies_of(enemy1, combatants)
     assert len(enemies) == 1
 
 def test_get_alives():
-    alive1 = CombatState(Unit('alive1', 1, 1, 1))
-    alive2 = CombatState(Unit('alive2', 1, 1, 1))
-    death1 = CombatState(Unit('death1', 0, 1, 1))
+    alive1 = BattleEltena(EltenaMaster('alive1', 1, 1, 1))
+    alive2 = BattleEltena(EltenaMaster('alive2', 1, 1, 1))
+    death1 = BattleEltena(EltenaMaster('death1', 0, 1, 1))
 
     combatants = [alive1, alive2, death1]
     alives = get_alive_actors(combatants)
     assert len(alives) == 2
 
 def test_dead_actor_action_order():
-    alive1_player = CombatState(Unit('player1', 10, 1, 1 ), Camp.PLAYER)
-    alive2_enemy  = CombatState(Unit('enemy1',  10, 1, 1 ), Camp.ENEMY)
-    death1_enemy  = CombatState(Unit('enemy2',  0 , 1, 10), Camp.ENEMY)
+    alive1_player = BattleEltena(EltenaMaster('player1', 10, 1, 1 ), Camp.PLAYER)
+    alive2_enemy  = BattleEltena(EltenaMaster('enemy1',  10, 1, 1 ), Camp.ENEMY)
+    death1_enemy  = BattleEltena(EltenaMaster('enemy2',  0 , 1, 10), Camp.ENEMY)
 
     combatants = [alive1_player, alive2_enemy, death1_enemy]
     action = ActionOrderManager(combatants)
