@@ -6,6 +6,7 @@ from battle import (
     Camp,
     auto_battle,
     get_alive_actors,
+    get_allies_amount_of,
     get_enemies_of,
 )
 from eltena_master import EltenaMaster
@@ -148,6 +149,17 @@ def test_get_alives():
     combatants = [alive1, alive2, death1]
     alives = get_alive_actors(combatants)
     assert len(alives) == 2
+
+def get_allies_amounts():
+    p1 = BattleEltena(EltenaMaster('p1', 1, 1, 1), Camp.PLAYER)
+    p2 = BattleEltena(EltenaMaster('p2', 1, 1, 1), Camp.PLAYER)
+    p3 = BattleEltena(EltenaMaster('p3', 1, 1, 1), Camp.PLAYER)
+    p4 = BattleEltena(EltenaMaster('p4', 1, 1, 1), Camp.PLAYER)
+    e1 = BattleEltena(EltenaMaster('p1', 1, 1, 1), Camp.ENEMY)
+
+    combatants = [p1, p2, p3, p4, e1]
+    allies_amount = get_allies_amount_of(Camp.PLAYER, combatants)
+    assert allies_amount == 4
 
 def test_dead_actor_action_order():
     alive1_player = BattleEltena(EltenaMaster('player1', 10, 1, 1 ), Camp.PLAYER)
