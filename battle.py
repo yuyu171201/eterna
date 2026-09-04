@@ -139,10 +139,13 @@ def input_target(
     attacker : BattleEltena ,
     combatants : list[BattleEltena]
 ) -> BattleEltena:
-    print(f'{attacker.name} の攻撃')
+    print(f'{attacker.name} の攻撃 : ▶︎ atk => {attacker.atk}')
     enemies = get_valid_enemies(attacker, combatants)
     for i, enemy in enumerate(enemies):
-        print(f"{i} --> {enemy.name}")    
+        print(f"{i} --> {enemy.name}")
+        hp_rate = enemy.current_hp / enemy.master.max_hp * 100
+        print(f'▶︎ hp  => {hp_rate:.2f}%')
+        print(f'▶︎ atk => {enemy.atk}')
 
     while True:
         try:
