@@ -3,6 +3,7 @@ from enum import Enum
 
 from eltena_master import EltenaMaster
 
+MAX_ELTENA_PER_CAMP = 4
 ACTION_COST = 10000
 
 class Camp(Enum):
@@ -114,6 +115,13 @@ def get_allies_of(
     allies = [actor for actor in combatants if actor.camp == attacker.camp]
     return allies
 
+def get_allies_amount_of(
+    camp : Camp ,
+    combatants : list[BattleEltena]  
+) -> int:
+    allies = [eltena for eltena in combatants if eltena.camp == camp]
+    return len(allies)
+
 
 # 攻撃対象の選択
 def select_target(
@@ -168,7 +176,7 @@ def attack(
 def auto_battle(
     entries : list[tuple[EltenaMaster, Camp]],
     choose_target = select_target
-):
+):  
     turn = 0
     logs = []
 
@@ -176,6 +184,11 @@ def auto_battle(
 
     for master, camp in entries:
         combatants.append(BattleEltena(master, camp=camp))
+
+    for camp in Camp:
+        num_of_party_eltenas = get_allies_amount_of(camp, combatants)
+        if num_of_party_eltenas > MAX_ELTENA_PER_CAMP:
+            raise ValueError("編成は4体以下に収めてください。")
 
     action = ActionOrderManager(combatants)
 
@@ -207,12 +220,26 @@ def auto_battle(
 if __name__ == "__main__":
     yusha = EltenaMaster("勇者", 100, 10, 60)
     yusha.show_status()
+    souryo = EltenaMaster("僧侶", 100, 5, 100)
+    souryo.show_status()
+    asashin = EltenaMaster("アサシン", 30, 30, 130)
+    asashin.show_status()
+    archer = EltenaMaster("アーチャー", 120, 10, 40)
+    archer.show_status()
+
     slime = EltenaMaster("スライム", 100, 5, 50)
     slime.show_status()
     goblin = EltenaMaster("ゴブリン", 40, 15, 70)
     goblin.show_status()
 
-    entries = [[yusha, Camp.PLAYER], [slime, Camp.ENEMY], [goblin, Camp.ENEMY]]
+    entries = [
+        [yusha, Camp.PLAYER] ,
+        [souryo, Camp.PLAYER] ,
+        [asashin, Camp.PLAYER] ,
+        [archer, Camp.PLAYER] ,
+        [slime, Camp.ENEMY] ,
+        [goblin, Camp.ENEMY]
+    ]
 
     print("バトル開始!\n")
 
@@ -225,5 +252,8 @@ if __name__ == "__main__":
             winner = '自'
         case Camp.ENEMY:
             winner = '敵'
+        case _:
+            winner = None
 
-    print(f"{winner}陣営が勝利しました。")
+    if winner:
+        print(f"{winner}陣営が勝利しました。")
