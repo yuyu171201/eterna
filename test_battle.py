@@ -37,8 +37,8 @@ def test_winner_camp():
     assert winner == Camp.PLAYER
 
 def test_speed_order():
-    actor1 = BattleEltena(EltenaMaster("勇者", 20, 10, 100))
-    actor2 = BattleEltena(EltenaMaster("スライム", 20, 5, 90))
+    actor1 = BattleEltena(EltenaMaster("勇者", 200, 10, 100), Camp.PLAYER)
+    actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 90), Camp.ENEMY)
     action = ActionOrderManager([actor1, actor2])
     assert actor1.ct == 0
     assert actor2.ct == 0
@@ -51,8 +51,8 @@ def test_speed_order():
     assert actor2.ct == 9000
 
 def test_speed_order_same_tick_to_threshold():
-    actor1 = BattleEltena(EltenaMaster("勇者", 20, 10, 150))
-    actor2 = BattleEltena(EltenaMaster("スライム", 20, 5, 151))
+    actor1 = BattleEltena(EltenaMaster("勇者", 20, 10, 150), Camp.PLAYER)
+    actor2 = BattleEltena(EltenaMaster("スライム", 20, 5, 151), Camp.ENEMY)
     action = ActionOrderManager([actor1, actor2])
     action.next_actor()
     assert actor1.ct == 10050 # 150 * 67
@@ -62,8 +62,8 @@ def test_speed_order_same_tick_to_threshold():
     assert actor2.ct == 268   # 151 * 68 - 10000
 
 def test_overheat_allows_double_at_3x():
-    actor1 = BattleEltena(EltenaMaster("勇者", 200, 10, 150))
-    actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 50))
+    actor1 = BattleEltena(EltenaMaster("勇者", 200, 10, 150), Camp.PLAYER)
+    actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 50), Camp.ENEMY)
     action = ActionOrderManager([actor1, actor2])
     action.next_actor()
     assert actor1.ct == 50    # 150 * 67  - 10000
@@ -82,8 +82,8 @@ def test_overheat_allows_double_at_3x():
     assert actor2.threshold == 20000
 
 def test_overheat_allows_double_at_4x():
-    actor1 = BattleEltena(EltenaMaster("勇者", 200, 10, 200))
-    actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 50))
+    actor1 = BattleEltena(EltenaMaster("勇者", 200, 10, 200), Camp.PLAYER)
+    actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 50), Camp.ENEMY)
     action = ActionOrderManager([actor1, actor2])
     action.next_actor()
     assert actor1.ct == 0     # 200 * 50  - 10000
@@ -107,8 +107,8 @@ def test_overheat_allows_double_at_4x():
     assert actor2.threshold == 10000
 
 def test_overheat_action_order():
-    actor1 = BattleEltena(EltenaMaster("勇者", 200, 10, 60))
-    actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 50))
+    actor1 = BattleEltena(EltenaMaster("勇者", 200, 10, 60), Camp.PLAYER)
+    actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 50), Camp.ENEMY)
     action = ActionOrderManager([actor1, actor2])
     actor = action.next_actor()
     assert actor == actor1
@@ -122,6 +122,22 @@ def test_overheat_action_order():
     assert actor == actor1
     actor = action.next_actor()
     assert actor == actor2
+
+def test_overheat_action_order_3player():
+    actor1 = BattleEltena(EltenaMaster("勇者1", 10000, 1, 150), Camp.PLAYER)
+    actor2 = BattleEltena(EltenaMaster("勇者2", 10000, 1, 100), Camp.PLAYER)
+    actor3 = BattleEltena(EltenaMaster("勇者3", 10000, 1, 50), Camp.PLAYER)
+    sandbag = BattleEltena(EltenaMaster("相手", 100000, 0, 1), Camp.ENEMY)
+
+    combatants = [actor1, actor2, actor3, sandbag]
+    action = ActionOrderManager(combatants)
+
+    assert action.next_actor() == actor1
+    assert action.next_actor() == actor2
+    assert action.next_actor() == actor1
+    assert action.next_actor() == actor2
+    assert action.next_actor() == actor1
+    assert action.next_actor() == actor3
 
 def test_get_enemies_player_to_enemy():
     player1 = BattleEltena(EltenaMaster('player1', 1, 1, 1), Camp.PLAYER)
@@ -171,3 +187,24 @@ def test_dead_actor_action_order():
     for _ in range(10):
         attacker = action.next_actor()
         assert attacker != death1_enemy
+
+def test_over_max_amount_per_camp():
+    actor1 = EltenaMaster('p1', 1, 1, 1)
+    actor2 = EltenaMaster('p2', 1, 1, 1)
+    actor3 = EltenaMaster('p3', 1, 1, 1)
+    actor4 = EltenaMaster('p4', 1, 1, 1)
+    actor5 = EltenaMaster('p5', 1, 1, 1)
+    actor6 = EltenaMaster('e1', 1, 1, 1)
+
+    entries = [
+        [actor1, Camp.PLAYER] ,
+        [actor2, Camp.PLAYER] ,
+        [actor3, Camp.PLAYER] ,
+        [actor4, Camp.PLAYER] ,
+        [actor5, Camp.PLAYER] ,
+        [actor6, Camp.ENEMY]
+    ]
+    try:
+        auto_battle(entries)
+    except ValueError as e:
+        assert str(e) == "Too many actors in one camp"

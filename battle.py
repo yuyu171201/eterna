@@ -191,7 +191,7 @@ def auto_battle(
     for camp in Camp:
         num_of_party_eltenas = get_allies_amount_of(camp, combatants)
         if num_of_party_eltenas > MAX_ELTENA_PER_CAMP:
-            raise ValueError("編成は4体以下に収めてください。")
+            raise ValueError("Too many actors in one camp")
 
     action = ActionOrderManager(combatants)
 
