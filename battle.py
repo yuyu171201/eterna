@@ -133,19 +133,12 @@ def select_target(
     target = random.choice(valid_targets)
     return target
 
-
 # 攻撃対象の入力での選択
 def input_target(
     attacker : BattleEltena ,
     combatants : list[BattleEltena]
 ) -> BattleEltena:
-    print(f'{attacker.name} の攻撃 : ▶︎ atk => {attacker.atk}')
     enemies = get_valid_enemies(attacker, combatants)
-    for i, enemy in enumerate(enemies):
-        print(f"{i} --> {enemy.name}")
-        hp_rate = enemy.current_hp / enemy.master.max_hp * 100
-        print(f'▶︎ hp  => {hp_rate:.2f}%')
-        print(f'▶︎ atk => {enemy.atk}')
 
     while True:
         try:
@@ -162,6 +155,9 @@ def input_target(
             print('不適切な入力です')
             print()
 
+def show_attacker(attacker : BattleEltena):
+    print(f'{attacker.name} の攻撃')
+    print()
 
 # 攻撃処理
 def attack(
@@ -174,11 +170,64 @@ def attack(
     defender.take_damage(attacker.atk)
     return event
 
+def slash(
+    attacker : BattleEltena ,
+    defender : BattleEltena
+):
+    damage = attacker.atk * 2
+    event = {'attacker':attacker.name, 'defender':defender.name, 'damage':damage}
+
+    defender.take_damage(damage)
+    return event
+
+def input_select_action():
+    print("行動を選択してください")
+    print("0. 攻撃")
+    print("1. スキル１(スラッシュ)")
+    while True:
+        try:
+            action = int(input('行動を選択して : '))
+        except ValueError:
+            print('数値で入力してください')
+            continue
+
+        match action:
+            case 0:
+                return attack
+            case 1:
+                return slash
+            case _:
+                print('不適切な入力です \n')
+
+def normal_action():
+    return attack
+
+def show_event(event):
+    print(f"{event['attacker']} は {event['defender']} に {event['damage']} のダメージを与えた!\n")
+
+def show_valid_combatants_status(combatants):
+    alives = get_alive_actors(combatants)
+    idx = 0
+    for actor in alives:
+        hp_rate = actor.current_hp / actor.master.max_hp * 100
+        print(f"{actor.name} のステータス")
+        print(f"▶︎ hp  => {hp_rate:.2f}%")
+        if actor.camp == Camp.PLAYER:
+            print(f"▶︎ atk => {actor.atk}")
+            print(f"▶︎ spd => {actor.speed}")
+        else:
+            print("▶︎ atk => ???")
+            print("▶︎ spd => ???")
+            print(f"to attack --> {idx}")
+            idx += 1
+
+        print()
 
 # バトルの実行
 def auto_battle(
     entries : list[tuple[EltenaMaster, Camp]],
-    choose_target = select_target
+    choose_target = select_target,
+    choose_action = normal_action
 ):  
     turn = 0
     logs = []
@@ -208,15 +257,22 @@ def auto_battle(
         turn += 1
             
         attacker = action.next_actor()
+        show_attacker(attacker)
+        show_valid_combatants_status(combatants)
+
+        if attacker.camp == Camp.PLAYER:
+            action_choice = choose_action()
+        else:
+            action_choice = normal_action()
 
         if attacker.camp == Camp.PLAYER:
             target = choose_target(attacker, combatants)
         else:
             target = select_target(attacker, combatants)
 
-        event = attack(attacker, target)
+        event = action_choice(attacker, target)
+        show_event(event)
 
-        event['turn'] = turn
         logs.append(event)
 
 
@@ -246,9 +302,9 @@ if __name__ == "__main__":
 
     print("バトル開始!\n")
 
-    win_camp, logs = auto_battle(entries, input_target)
-    for log in logs:
-        print(f"turn {log['turn']}: {log['attacker']} は {log['defender']} に {log['damage']} のダメージを与えた!\n")
+    win_camp, logs = auto_battle(entries, input_target, input_select_action)
+    for i, log in enumerate(logs):
+        print(f"turn {i + 1}: {log['attacker']} は {log['defender']} に {log['damage']} のダメージを与えた!\n")
 
     match win_camp:
         case Camp.PLAYER:
