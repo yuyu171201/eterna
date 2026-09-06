@@ -205,7 +205,7 @@ def normal_action():
 def show_event(event):
     print(f"{event['attacker']} は {event['defender']} に {event['damage']} のダメージを与えた!\n")
 
-def show_valid_combatants_status(combatants):
+def show_alive_combatants_status(combatants):
     alives = get_alive_actors(combatants)
     idx = 0
     for actor in alives:
@@ -258,16 +258,13 @@ def auto_battle(
             
         attacker = action.next_actor()
         show_attacker(attacker)
-        show_valid_combatants_status(combatants)
+        show_alive_combatants_status(combatants)
 
         if attacker.camp == Camp.PLAYER:
             action_choice = choose_action()
-        else:
-            action_choice = normal_action()
-
-        if attacker.camp == Camp.PLAYER:
             target = choose_target(attacker, combatants)
         else:
+            action_choice = normal_action()
             target = select_target(attacker, combatants)
 
         event = action_choice(attacker, target)
