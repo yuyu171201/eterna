@@ -17,14 +17,14 @@ class BattleEltena:
 
         self.current_hp = master.max_hp
 
-        self.ct = 0
+        self.action_gauge = 0
         self.threshold = ACTION_COST
 
     def take_damage(self, damage):
         self.current_hp = max(self.current_hp - damage, 0)
 
     def on_acted(self):
-        self.ct -= self.threshold
+        self.action_gauge -= self.threshold
 
     def overheat(self):
         self.threshold += ACTION_COST
@@ -60,14 +60,14 @@ class ActionOrderManager:
         self.alived_actors = get_alive_actors(self.actors)
 
         for actor in self.alived_actors:
-            actor.ct += actor.speed
+            actor.action_gauge += actor.speed
 
-        max_ct = 0
+        max_action_gauge = 0
         maxed_actor = None
 
         for actor in self.alived_actors:
-            if actor.ct >= actor.threshold and actor.ct > max_ct:
-                max_ct = actor.ct
+            if actor.action_gauge >= actor.threshold and actor.action_gauge > max_action_gauge:
+                max_action_gauge = actor.action_gauge
                 maxed_actor = actor
 
         if maxed_actor is not None:

@@ -40,45 +40,45 @@ def test_speed_order():
     actor1 = BattleEltena(EltenaMaster("勇者", 200, 10, 100), Camp.PLAYER)
     actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 90), Camp.ENEMY)
     action = ActionOrderManager([actor1, actor2])
-    assert actor1.ct == 0
-    assert actor2.ct == 0
+    assert actor1.action_gauge == 0
+    assert actor2.action_gauge == 0
     action.tick()
-    assert actor1.ct == 100
-    assert actor2.ct == 90
+    assert actor1.action_gauge == 100
+    assert actor2.action_gauge == 90
     for i in range(99):
         action.tick()
-    assert actor1.ct == 0
-    assert actor2.ct == 9000
+    assert actor1.action_gauge == 0
+    assert actor2.action_gauge == 9000
 
 def test_speed_order_same_tick_to_threshold():
     actor1 = BattleEltena(EltenaMaster("勇者", 20, 10, 150), Camp.PLAYER)
     actor2 = BattleEltena(EltenaMaster("スライム", 20, 5, 151), Camp.ENEMY)
     action = ActionOrderManager([actor1, actor2])
     action.next_actor()
-    assert actor1.ct == 10050 # 150 * 67
-    assert actor2.ct == 117   # 151 * 67 - 10000
+    assert actor1.action_gauge == 10050 # 150 * 67
+    assert actor2.action_gauge == 117   # 151 * 67 - 10000
     action.next_actor()
-    assert actor1.ct == 200   # 150 * 68 - 10000
-    assert actor2.ct == 268   # 151 * 68 - 10000
+    assert actor1.action_gauge == 200   # 150 * 68 - 10000
+    assert actor2.action_gauge == 268   # 151 * 68 - 10000
 
 def test_overheat_allows_double_at_3x():
     actor1 = BattleEltena(EltenaMaster("勇者", 200, 10, 150), Camp.PLAYER)
     actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 50), Camp.ENEMY)
     action = ActionOrderManager([actor1, actor2])
     action.next_actor()
-    assert actor1.ct == 50    # 150 * 67  - 10000
+    assert actor1.action_gauge == 50    # 150 * 67  - 10000
     assert actor1.threshold == 20000
-    assert actor2.ct == 3350  # 50  * 67
+    assert actor2.action_gauge == 3350  # 50  * 67
     assert actor2.threshold == 10000 
     action.next_actor()
-    assert actor1.ct == 0     # 150 * 200 - 10000 - 20000
+    assert actor1.action_gauge == 0     # 150 * 200 - 10000 - 20000
     assert actor1.threshold == 30000
-    assert actor2.ct == 10000 # 50  * 200
+    assert actor2.action_gauge == 10000 # 50  * 200
     assert actor2.threshold == 10000
     action.next_actor()
-    assert actor1.ct == 150   # 150 * 201 - 30000
+    assert actor1.action_gauge == 150   # 150 * 201 - 30000
     assert actor1.threshold == 10000
-    assert actor2.ct == 50    # 50  * 201 - 10000
+    assert actor2.action_gauge == 50    # 50  * 201 - 10000
     assert actor2.threshold == 20000
 
 def test_overheat_allows_double_at_4x():
@@ -86,24 +86,24 @@ def test_overheat_allows_double_at_4x():
     actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 50), Camp.ENEMY)
     action = ActionOrderManager([actor1, actor2])
     action.next_actor()
-    assert actor1.ct == 0     # 200 * 50  - 10000
+    assert actor1.action_gauge == 0     # 200 * 50  - 10000
     assert actor1.threshold == 20000
-    assert actor2.ct == 2500  # 50  * 50 
+    assert actor2.action_gauge == 2500  # 50  * 50 
     assert actor2.threshold == 10000
     action.next_actor()
-    assert actor1.ct == 0     # 200 * 150 - 10000 - 20000
+    assert actor1.action_gauge == 0     # 200 * 150 - 10000 - 20000
     assert actor1.threshold == 30000
-    assert actor2.ct == 7500  # 50  * 150
+    assert actor2.action_gauge == 7500  # 50  * 150
     assert actor2.threshold == 10000
     action.next_actor()
-    assert actor1.ct == 10000  # 200 * 200 - 30000
+    assert actor1.action_gauge == 10000  # 200 * 200 - 30000
     assert actor1.threshold == 10000
-    assert actor2.ct == 0      # 50  * 200
+    assert actor2.action_gauge == 0      # 50  * 200
     assert actor2.threshold == 20000
     action.next_actor()
-    assert actor1.ct == 200    # 200 * 201 - 30000 - 10000
+    assert actor1.action_gauge == 200    # 200 * 201 - 30000 - 10000
     assert actor1.threshold == 20000
-    assert actor2.ct == 50     # 50  * 201 - 20000
+    assert actor2.action_gauge == 50     # 50  * 201 - 20000
     assert actor2.threshold == 10000
 
 def test_overheat_action_order():
