@@ -282,19 +282,6 @@ def auto_battle(
 
 
 if __name__ == "__main__":
-    yusha = EltenaMaster("勇者", 100, 10, 60)
-    yusha.show_status()
-    souryo = EltenaMaster("僧侶", 100, 5, 100)
-    souryo.show_status()
-    asashin = EltenaMaster("アサシン", 30, 30, 130)
-    asashin.show_status()
-    archer = EltenaMaster("アーチャー", 120, 10, 40)
-    archer.show_status()
-
-    slime = EltenaMaster("スライム", 100, 5, 50)
-    slime.show_status()
-    goblin = EltenaMaster("ゴブリン", 40, 15, 70)
-    goblin.show_status()
 
     entries = [
         [yusha_master, Camp.PLAYER] ,
