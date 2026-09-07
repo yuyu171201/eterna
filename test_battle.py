@@ -1,5 +1,6 @@
 # import pytest
 
+import skills
 from battle import (
     ActionOrderManager,
     BattleEltena,
@@ -208,3 +209,13 @@ def test_over_max_amount_per_camp():
         auto_battle(entries)
     except ValueError as e:
         assert str(e) == "Too many actors in one camp"
+
+def test_default_skill_execution():
+    skill = skills.Skill("Attack", 100)
+    attacker = BattleEltena(EltenaMaster("勇者", 20, 10, 100))
+    target = BattleEltena(EltenaMaster("スライム", 20, 5, 90))
+    event = skill.execute(attacker, target)
+    assert event['attacker'] == "勇者"
+    assert event['defender'] == "スライム"
+    assert event['using_skill'] == "Attack"
+    assert event['damage'] == 10
