@@ -13,3 +13,11 @@ class EltenaMaster:
         print(f"ATK: {self.atk}")
         print(f"SPD: {self.spd}")
         print()
+
+yusha_master   = EltenaMaster("勇者", 100, 10, 60)
+souryo_master  = EltenaMaster("僧侶", 100, 5, 100)
+asashin_master = EltenaMaster("アサシン", 30, 30, 130)
+archer_master  = EltenaMaster("アーチャー", 120, 10, 40)
+
+slime_master   = EltenaMaster("スライム", 100, 5, 50)
+goblin_master  = EltenaMaster("ゴブリン", 40, 15, 70)

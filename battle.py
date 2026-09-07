@@ -1,7 +1,15 @@
 import random
 from enum import Enum
 
-from eltena_master import EltenaMaster
+from eltena_master import (
+    EltenaMaster,
+    archer_master,
+    asashin_master,
+    goblin_master,
+    slime_master,
+    souryo_master,
+    yusha_master,
+)
 
 MAX_ELTENA_PER_CAMP = 4
 ACTION_COST = 10000
@@ -225,7 +233,7 @@ def show_alive_combatants_status(combatants):
 
 # バトルの実行
 def auto_battle(
-    entries : list[tuple[EltenaMaster, Camp]],
+    entries : list[list[EltenaMaster, Camp]],
     choose_target = select_target,
     choose_action = normal_action
 ):  
@@ -289,12 +297,12 @@ if __name__ == "__main__":
     goblin.show_status()
 
     entries = [
-        [yusha, Camp.PLAYER] ,
-        [souryo, Camp.PLAYER] ,
-        [asashin, Camp.PLAYER] ,
-        [archer, Camp.PLAYER] ,
-        [slime, Camp.ENEMY] ,
-        [goblin, Camp.ENEMY]
+        [yusha_master, Camp.PLAYER] ,
+        [souryo_master, Camp.PLAYER] ,
+        [asashin_master, Camp.PLAYER] ,
+        [archer_master, Camp.PLAYER] ,
+        [slime_master, Camp.ENEMY] ,
+        [goblin_master, Camp.ENEMY]
     ]
 
     print("バトル開始!\n")
