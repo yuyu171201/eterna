@@ -219,3 +219,10 @@ def test_default_skill_execution():
     assert event['defender'] == "スライム"
     assert event['using_skill'] == "Attack"
     assert event['damage'] == 10
+
+def test_ne_BattleSkill_and_BattleEltena_skill():
+    skill = skills.NormalSlash()
+    owner_master = EltenaMaster("owner", 1, 1, 1)
+    skill_owner = BattleEltena(owner_master)
+
+    assert skill_owner.normal_attack is not skill
