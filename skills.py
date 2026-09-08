@@ -1,5 +1,6 @@
 class Skill:
-    def __init__(self, name, multiplier):
+    def __init__(self, name : str, multiplier : int
+    ):
         self.name = name
         self.multiplier = multiplier
 
@@ -14,3 +15,6 @@ class Skill:
         }
         return event
 
+class NormalSlash(Skill):
+    def __init__(self):
+        super().__init__('スラッシュ', 200)
