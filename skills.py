@@ -15,6 +15,10 @@ class Skill:
         }
         return event
 
+class NormalAttack(Skill):
+    def __init__(self):
+        super().__init__('通常攻撃', 100)
+
 class NormalSlash(Skill):
     def __init__(self):
         super().__init__('スラッシュ', 200)

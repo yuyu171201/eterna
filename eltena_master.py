@@ -4,7 +4,7 @@ import skills
 class EltenaMaster:
 
     # 初期化
-    def __init__(self, name, hp, atk, spd, normal_attack = skills.NormalSlash):
+    def __init__(self, name, hp, atk, spd, normal_attack = skills.NormalAttack):
         self.name = name
         self.max_hp = hp
         self.atk = atk
