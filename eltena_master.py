@@ -1,11 +1,15 @@
+import skills
+
 class EltenaMaster:
 
     # 初期化
-    def __init__(self, name, hp, atk, spd):
+    def __init__(self, name, hp, atk, spd, normal_attack = skills.NormalSlash):
         self.name = name
         self.max_hp = hp
         self.atk = atk
         self.spd = spd
+
+        self.normal_attack = normal_attack()
 
     def show_status(self):
         print(f"{self.name} のステータス")
