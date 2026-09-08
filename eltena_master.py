@@ -1,5 +1,6 @@
 import skills
 
+
 class EltenaMaster:
 
     # 初期化
