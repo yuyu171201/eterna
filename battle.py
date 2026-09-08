@@ -60,6 +60,18 @@ class BattleEltena:
     def __repr__(self):
         return f'{self.__class__.__name__}(master={self.master.name}, camp={self.camp})'
 
+class BattleSkill:
+    def __init__(self, skill, remaining_ct=0):
+        self.skill = skill
+        self.remaining_ct = remaining_ct
+
+    @property
+    def name(self):
+        return self.skill.name
+
+    def execute(self, attacker, target):
+        return self.skill.execute(attacker, target) 
+
 class ActionOrderManager:
     def __init__(self, actors):
         self.actors = actors
