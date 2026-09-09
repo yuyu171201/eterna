@@ -65,7 +65,7 @@ class BattleEltena:
 class BattleSkill:
     def __init__(self, skill):
         self.skill = skill
-        self.remaining_ct = skill.ct_cap
+        self.current_ct = skill.max_ct
 
     @property
     def name(self):
@@ -73,14 +73,14 @@ class BattleSkill:
 
     @property
     def is_ready(self):
-        return self.remaining_ct == self.skill.ct_cap
+        return self.current_ct == self.skill.max_ct
 
     def on_acted(self):
-        if self.remaining_ct < self.skill.ct_cap:
-            self.remaining_ct += 1
+        if self.current_ct < self.skill.max_ct:
+            self.current_ct += 1
 
     def on_used(self):
-        self.remaining_ct = 0
+        self.current_ct = 0
 
     def execute(self, attacker, target):
         return self.skill.execute(attacker, target) 
