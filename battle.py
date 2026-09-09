@@ -213,10 +213,10 @@ def slash(
     defender.take_damage(damage)
     return event
 
-def input_select_action():
+def input_select_action(attacker : BattleEltena):
     print("行動を選択してください")
-    print("0. 攻撃")
-    print("1. スキル１(スラッシュ)")
+    print("0. 通常攻撃")
+    # print("1. スキル１(スラッシュ)")
     while True:
         try:
             action = int(input('行動を選択して : '))
@@ -226,14 +226,14 @@ def input_select_action():
 
         match action:
             case 0:
-                return attack
-            case 1:
-                return slash
+                return attacker.normal_attack.execute
+            # case 1:
+            #     return slash
             case _:
                 print('不適切な入力です \n')
 
-def normal_action():
-    return attack
+def normal_action(attacker : BattleEltena):
+    return attacker.normal_attack.execute
 
 def show_event(event):
     print(f"{event['attacker']} は {event['defender']} に {event['damage']} のダメージを与えた!\n")
@@ -294,10 +294,10 @@ def auto_battle(
         show_alive_combatants_status(combatants)
 
         if attacker.camp == Camp.PLAYER:
-            action_choice = choose_action()
+            action_choice = choose_action(attacker)
             target = choose_target(attacker, combatants)
         else:
-            action_choice = normal_action()
+            action_choice = normal_action(attacker)
             target = select_target(attacker, combatants)
 
         event = action_choice(attacker, target)
