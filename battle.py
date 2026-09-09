@@ -28,7 +28,7 @@ class BattleEltena:
         self.action_gauge = 0
         self.threshold = ACTION_COST
 
-        self.normal_attack = master.normal_attack
+        self.normal_attack = BattleSkill(master.normal_attack)
 
     def take_damage(self, damage):
         self.current_hp = max(self.current_hp - damage, 0)

@@ -221,8 +221,10 @@ def test_default_skill_execution():
     assert event['damage'] == 10
 
 def test_ne_BattleSkill_and_BattleEltena_skill():
-    skill = skills.NormalSlash()
+    skill = skills.NormalAttack()
     owner_master = EltenaMaster("owner", 1, 1, 1)
-    skill_owner = BattleEltena(owner_master)
+    skill_owner0 = BattleEltena(owner_master)
+    skill_owner1 = BattleEltena(owner_master)
 
-    assert skill_owner.normal_attack is not skill
+    assert skill_owner0.normal_attack is not skill_owner1.normal_attack
+    assert skill_owner0.normal_attack.skill is skill_owner1.normal_attack.skill
