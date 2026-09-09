@@ -63,13 +63,24 @@ class BattleEltena:
         return f'{self.__class__.__name__}(master={self.master.name}, camp={self.camp})'
 
 class BattleSkill:
-    def __init__(self, skill, remaining_ct=0):
+    def __init__(self, skill):
         self.skill = skill
-        self.remaining_ct = remaining_ct
+        self.remaining_ct = skill.ct_cap
 
     @property
     def name(self):
         return self.skill.name
+
+    @property
+    def is_ready(self):
+        return self.remaining_ct == self.skill.ct_cap
+
+    def on_acted(self):
+        if self.remaining_ct < self.skill.ct_cap:
+            self.remaining_ct += 1
+
+    def on_used(self):
+        self.remaining_ct = 0
 
     def execute(self, attacker, target):
         return self.skill.execute(attacker, target) 

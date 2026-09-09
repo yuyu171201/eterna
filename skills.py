@@ -1,8 +1,9 @@
 class Skill:
-    def __init__(self, name : str, multiplier : int
+    def __init__(self, name : str, multiplier : int, ct_cap : int = 0
     ):
         self.name = name
         self.multiplier = multiplier
+        self.ct_cap = ct_cap
 
     def execute(self, attacker, target):
         damage = int(attacker.atk * self.multiplier / 100)
