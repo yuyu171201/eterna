@@ -95,6 +95,7 @@ class BattleSkill:
         self.current_ct = 0
 
     def execute(self, attacker, target):
+        self.on_used()
         return self.skill.execute(attacker, target) 
 
 class ActionOrderManager:
@@ -219,7 +220,6 @@ def input_select_action(attacker : BattleEltena):
 
         if action >= 0 and action < len(attacker.ready_actions):
             selected_action = attacker.ready_actions[action]
-            selected_action.on_used()
             return selected_action.execute
         else:
             print('範囲外の数値です')
