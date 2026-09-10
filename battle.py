@@ -66,6 +66,10 @@ class BattleEltena:
     @property
     def actions(self):
         return [self.normal_attack, *self.skills]
+
+    @property
+    def ready_actions(self):
+        return [action for action in self.actions if action.is_ready]
     
     def __repr__(self):
         return f'{self.__class__.__name__}(master={self.master.name}, camp={self.camp})'
@@ -202,9 +206,8 @@ def show_attacker(attacker : BattleEltena):
 
 def input_select_action(attacker : BattleEltena):
     print("行動を選択してください")
-    actions = list(enumerate([attacker.normal_attack, *attacker.skills]))
 
-    for i, action in actions:
+    for i, action in enumerate(attacker.ready_actions):
         print(f"{i}. {action.name}")
 
     while True:
@@ -214,8 +217,9 @@ def input_select_action(attacker : BattleEltena):
             print('数値で入力してください')
             continue
 
-        if action >= 0 and action < len(actions):
-            selected_action = actions[action][1]
+        if action >= 0 and action < len(attacker.ready_actions):
+            selected_action = attacker.ready_actions[action]
+            selected_action.on_used()
             return selected_action.execute
         else:
             print('範囲外の数値です')
@@ -297,10 +301,10 @@ def auto_battle(
 if __name__ == "__main__":
 
     entries = [
-        [yusha_master, Camp.PLAYER] ,
-        [souryo_master, Camp.PLAYER] ,
+        # [yusha_master, Camp.PLAYER] ,
+        # [souryo_master, Camp.PLAYER] ,
         [asashin_master, Camp.PLAYER] ,
-        [archer_master, Camp.PLAYER] ,
+        # [archer_master, Camp.PLAYER] ,
         [slime_master, Camp.ENEMY] ,
         [goblin_master, Camp.ENEMY]
     ]
