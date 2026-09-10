@@ -215,8 +215,11 @@ def slash(
 
 def input_select_action(attacker : BattleEltena):
     print("行動を選択してください")
-    print("0. 通常攻撃")
-    # print("1. スキル１(スラッシュ)")
+    actions = list(enumerate([attacker.normal_attack, *attacker.master.skills]))
+
+    for i, action in actions:
+        print(f"{i}. {action.name}")
+
     while True:
         try:
             action = int(input('行動を選択して : '))
@@ -224,13 +227,9 @@ def input_select_action(attacker : BattleEltena):
             print('数値で入力してください')
             continue
 
-        match action:
-            case 0:
-                return attacker.normal_attack.execute
-            # case 1:
-            #     return slash
-            case _:
-                print('不適切な入力です \n')
+        if action >= 0 and action < len(actions):
+            selected_action = actions[action][1]
+            return selected_action.execute
 
 def normal_action(attacker : BattleEltena):
     return attacker.normal_attack.execute
