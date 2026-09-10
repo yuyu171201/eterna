@@ -30,11 +30,15 @@ class BattleEltena:
 
         self.normal_attack = BattleSkill(master.normal_attack)
 
+        self.skills = [BattleSkill(skill) for skill in master.skills]
+
     def take_damage(self, damage):
         self.current_hp = max(self.current_hp - damage, 0)
 
     def on_acted(self):
         self.action_gauge -= self.threshold
+        for action in self.actions:
+            action.on_acted()
 
     def overheat(self):
         self.threshold += ACTION_COST
@@ -58,6 +62,10 @@ class BattleEltena:
     @property
     def name(self):
         return self.master.name
+
+    @property
+    def actions(self):
+        return [self.normal_attack, *self.skills]
     
     def __repr__(self):
         return f'{self.__class__.__name__}(master={self.master.name}, camp={self.camp})'
@@ -215,7 +223,7 @@ def slash(
 
 def input_select_action(attacker : BattleEltena):
     print("行動を選択してください")
-    actions = list(enumerate([attacker.normal_attack, *attacker.master.skills]))
+    actions = list(enumerate([attacker.normal_attack, *attacker.skills]))
 
     for i, action in actions:
         print(f"{i}. {action.name}")
@@ -230,6 +238,8 @@ def input_select_action(attacker : BattleEltena):
         if action >= 0 and action < len(actions):
             selected_action = actions[action][1]
             return selected_action.execute
+        else:
+            print('範囲外の数値です')
 
 def normal_action(attacker : BattleEltena):
     return attacker.normal_attack.execute
