@@ -200,27 +200,6 @@ def show_attacker(attacker : BattleEltena):
     print(f'{attacker.name} の攻撃')
     print()
 
-# 攻撃処理
-def attack(
-    attacker : BattleEltena ,
-    defender : BattleEltena
-):
-    # 辞書型(攻撃者,　被攻撃者, ダメージ量)
-    event = {'attacker':attacker.name, 'defender':defender.name, 'damage':attacker.atk}
-
-    defender.take_damage(attacker.atk)
-    return event
-
-def slash(
-    attacker : BattleEltena ,
-    defender : BattleEltena
-):
-    damage = attacker.atk * 2
-    event = {'attacker':attacker.name, 'defender':defender.name, 'damage':damage}
-
-    defender.take_damage(damage)
-    return event
-
 def input_select_action(attacker : BattleEltena):
     print("行動を選択してください")
     actions = list(enumerate([attacker.normal_attack, *attacker.skills]))
