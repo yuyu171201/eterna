@@ -4,7 +4,7 @@ import skills
 class EltenaMaster:
 
     # 初期化
-    def __init__(self, name, hp, atk, spd, normal_attack = skills.NormalAttack, skills = None):
+    def __init__(self, name, hp, atk, spd, normal_attack = skills.NormalAttack, own_skills = None):
         self.name = name
         self.max_hp = hp
         self.atk = atk
@@ -12,7 +12,7 @@ class EltenaMaster:
 
         self.normal_attack = normal_attack()
 
-        self.skills = skills
+        self.skills = own_skills or []
 
     def show_status(self):
         print(f"{self.name} のステータス")
@@ -22,45 +22,45 @@ class EltenaMaster:
         print()
 
 yusha_master   = EltenaMaster(
-    "勇者", 
-    100, 
-    10, 
-    60,
-    skills = [
+    name="勇者", 
+    hp=100, 
+    atk=10, 
+    spd=60,
+    own_skills = [
         skills.NormalSlash()
     ]
 )
 souryo_master  = EltenaMaster(
-    "僧侶", 
-    100, 
-    5, 
-    100
+    name="僧侶", 
+    hp=100, 
+    atk=5, 
+    spd=100
 )
 asashin_master = EltenaMaster(
-    "アサシン", 
-    30, 
-    30, 
-    130, 
-    skills = [
+    name="アサシン", 
+    hp=30, 
+    atk=30, 
+    spd=130, 
+    own_skills = [
         skills.NormalSlash()
     ]
 )
 archer_master  = EltenaMaster(
-    "アーチャー", 
-    120, 
-    10, 
-    40
+    name="アーチャー", 
+    hp=120, 
+    atk=10, 
+    spd=40
 )
 
 slime_master   = EltenaMaster(
-    "スライム", 
-    100, 
-    5, 
-    50
+    name="スライム", 
+    hp=100, 
+    atk=5, 
+    spd=50
 )
 goblin_master  = EltenaMaster(
-    "ゴブリン", 
-    40, 
-    15, 
-    70
+    name="ゴブリン", 
+    hp=40, 
+    atk=15, 
+    spd=70
 )
