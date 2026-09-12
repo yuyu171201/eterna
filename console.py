@@ -26,7 +26,7 @@ def input_select_action(attacker : BattleEltena):
 
         if action >= 0 and action < len(attacker.actions) and attacker.actions[action].is_ready:
             selected_action = attacker.actions[action]
-            return selected_action.execute
+            return selected_action
         else:
             print('範囲外の数値です')
 

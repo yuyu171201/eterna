@@ -28,7 +28,7 @@ def select_target(
     return target
 
 def normal_action(attacker : BattleEltena):
-    return attacker.normal_attack.execute
+    return attacker.normal_attack
 
 
 # バトルの実行
@@ -75,7 +75,7 @@ def auto_battle(
             action_choice = normal_action(attacker)
             target = select_target(attacker, combatants)
 
-        event = action_choice(attacker, target)
+        event = action_choice.execute(attacker, target)
         show_event(event)
 
         logs.append(event)
