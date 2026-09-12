@@ -156,3 +156,14 @@ def get_allies_amount_of(
     allies = [eltena for eltena in combatants if eltena.camp == camp]
     return len(allies)
 
+def is_action_usable(
+        action_idx : int ,
+        attacker : BattleEltena
+) -> bool:
+    return action_idx >= 0 and action_idx < len(attacker.actions) and attacker.actions[action_idx].is_ready
+
+def is_target_selectable(
+        target_idx : int ,
+        targets : list[BattleEltena]
+) -> bool:
+    return target_idx >= 0 and target_idx < len(targets)

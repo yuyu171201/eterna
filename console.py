@@ -1,9 +1,4 @@
-from battle import (
-    BattleEltena,
-    Camp,
-    get_alive_actors,
-    get_valid_enemies,
-)
+from battle import BattleEltena, Camp, get_alive_actors, get_valid_enemies, is_target_selectable, is_action_usable
 
 
 def show_attacker(attacker : BattleEltena):
@@ -19,13 +14,13 @@ def input_select_action(attacker : BattleEltena):
 
     while True:
         try:
-            action = int(input('行動を選択して : '))
+            action_idx = int(input('行動を選択して : '))
         except ValueError:
             print('数値で入力してください')
             continue
 
-        if action >= 0 and action < len(attacker.actions) and attacker.actions[action].is_ready:
-            selected_action = attacker.actions[action]
+        if is_action_usable(action_idx, attacker):
+            selected_action = attacker.actions[action_idx]
             return selected_action
         else:
             print('範囲外の数値です')
@@ -44,7 +39,7 @@ def input_target(
             print('数値で入力してください')
             continue
 
-        if target_idx >= 0 and target_idx < len(enemies):
+        if is_target_selectable(target_idx, targets=enemies):
             target = enemies[target_idx]
             print()
             return target
