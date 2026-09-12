@@ -208,8 +208,9 @@ def show_attacker(attacker : BattleEltena):
 def input_select_action(attacker : BattleEltena):
     print("行動を選択してください")
 
-    for i, action in enumerate(attacker.ready_actions):
-        print(f"{i}. {action.name}")
+    for i, action in enumerate(attacker.actions):
+        ready_status = 'is ready!' if action.is_ready else 'is not ready'
+        print(f"{i}. {action.name} ({ready_status})")
 
     while True:
         try:
@@ -218,8 +219,8 @@ def input_select_action(attacker : BattleEltena):
             print('数値で入力してください')
             continue
 
-        if action >= 0 and action < len(attacker.ready_actions):
-            selected_action = attacker.ready_actions[action]
+        if action >= 0 and action < len(attacker.actions) and attacker.actions[action].is_ready:
+            selected_action = attacker.actions[action]
             return selected_action.execute
         else:
             print('範囲外の数値です')
