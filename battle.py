@@ -158,9 +158,9 @@ def get_allies_amount_of(
 
 def is_action_usable(
         action_idx : int ,
-        attacker : BattleEltena
+        actions : list[BattleSkill]
 ) -> bool:
-    return action_idx >= 0 and action_idx < len(attacker.actions) and attacker.actions[action_idx].is_ready
+    return action_idx >= 0 and action_idx < len(actions) and actions[action_idx].is_ready
 
 def is_target_selectable(
         target_idx : int ,
