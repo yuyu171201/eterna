@@ -23,3 +23,7 @@ class NormalAttack(Skill):
 class NormalSlash(Skill):
     def __init__(self):
         super().__init__('スラッシュ', 200, max_ct=2)
+
+class ExtraSlash(Skill):
+    def __init__(self):
+        super().__init__('エクストラスラッシュ', 400, max_ct=4)

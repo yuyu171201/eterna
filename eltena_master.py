@@ -27,7 +27,8 @@ yusha_master   = EltenaMaster(
     atk=10, 
     spd=60,
     own_skills = [
-        skills.NormalSlash()
+        skills.NormalSlash(),
+        skills.ExtraSlash()
     ]
 )
 souryo_master  = EltenaMaster(

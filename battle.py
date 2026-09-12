@@ -301,10 +301,10 @@ def auto_battle(
 if __name__ == "__main__":
 
     entries = [
-        # [yusha_master, Camp.PLAYER] ,
-        # [souryo_master, Camp.PLAYER] ,
+        [yusha_master, Camp.PLAYER] ,
+        [souryo_master, Camp.PLAYER] ,
         [asashin_master, Camp.PLAYER] ,
-        # [archer_master, Camp.PLAYER] ,
+        [archer_master, Camp.PLAYER] ,
         [slime_master, Camp.ENEMY] ,
         [goblin_master, Camp.ENEMY]
     ]
