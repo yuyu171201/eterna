@@ -5,8 +5,11 @@ from battle import (
     ActionOrderManager,
     BattleEltena,
     Camp,
+    get_alive_actors,
+    get_allies_amount_of,
+    get_enemies_of,
 )
-from driver import auto_battle, get_alive_actors, get_allies_amount_of, get_enemies_of
+from driver import auto_battle
 from eltena_master import EltenaMaster
 
 
