@@ -37,7 +37,6 @@ def auto_battle(
     choose_target = select_target,
     choose_action = normal_action
 ):  
-    turn = 0
     logs = []
 
     combatants = []
@@ -61,8 +60,6 @@ def auto_battle(
             return remain_camps[0], logs
         elif num_camps == 0:
             return None, logs
-        
-        turn += 1
             
         attacker = action.next_actor()
         show_attacker(attacker)
