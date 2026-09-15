@@ -8,14 +8,21 @@ from battle import (
     get_allies_amount_of,
     get_enemies_of,
 )
-from console import (
-    show_alive_combatants_status,
-    show_attacker,
-    show_event,
-)
 from eltena_master import EltenaMaster
 
 MAX_ELTENA_PER_CAMP = 4
+
+class NullView:
+    def show_attacker(self,attacker):
+        pass
+
+    def show_alive_combatants_status(self,combatants):
+        pass
+
+    def show_event(self,event):
+        pass
+
+null_view = NullView()
 
 # 攻撃対象の選択
 def select_target(
@@ -35,7 +42,8 @@ def normal_action(attacker : BattleEltena):
 def auto_battle(
     entries : list[list[EltenaMaster, Camp]],
     choose_target = select_target,
-    choose_action = normal_action
+    choose_action = normal_action,
+    view = null_view
 ):  
     logs = []
 
@@ -62,8 +70,8 @@ def auto_battle(
             return None, logs
             
         attacker = action.next_actor()
-        show_attacker(attacker)
-        show_alive_combatants_status(combatants)
+        view.show_attacker(attacker)
+        view.show_alive_combatants_status(combatants)
 
         if attacker.camp == Camp.PLAYER:
             action_choice = choose_action(attacker)
@@ -73,6 +81,6 @@ def auto_battle(
             target = select_target(attacker, combatants)
 
         event = action_choice.execute(attacker, target)
-        show_event(event)
+        view.show_event(event)
 
         logs.append(event)

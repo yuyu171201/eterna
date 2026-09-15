@@ -1,3 +1,4 @@
+import console
 from battle import Camp
 from console import input_select_action, input_target
 from driver import auto_battle
@@ -23,7 +24,7 @@ if __name__ == "__main__":
 
     print("バトル開始!\n")
 
-    win_camp, logs = auto_battle(entries, input_target, input_select_action)
+    win_camp, logs = auto_battle(entries, input_target, input_select_action, view = console)
     for i, log in enumerate(logs):
         print(f"turn {i + 1}: {log['attacker']} は {log['defender']} に {log['damage']} のダメージを与えた!\n")
 
