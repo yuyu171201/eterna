@@ -87,7 +87,7 @@ class ActionOrderManager:
         self.actors = actors
 
     def tick(self):
-        alived_actors = get_alive_combatants(self.actors)
+        alive_actors = get_alive_combatants(self.actors)
 
         for actor in self.alived_actors:
             actor.action_gauge += actor.spd
@@ -95,13 +95,13 @@ class ActionOrderManager:
         max_action_gauge = 0
         maxed_actor = None
 
-        for actor in alived_actors:
+        for actor in alive_actors:
             if actor.action_gauge >= actor.threshold and actor.action_gauge > max_action_gauge:
                 max_action_gauge = actor.action_gauge
                 maxed_actor = actor
 
         if maxed_actor is not None:
-            for actor in alived_actors:
+            for actor in alive_actors:
                 if actor == maxed_actor:
                     actor.on_acted()
                     actor.overheat()
