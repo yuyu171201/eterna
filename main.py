@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     win_camp, logs = auto_battle(entries, input_target, input_select_action, view = console)
     for i, log in enumerate(logs):
-        print(f"turn {i + 1}: {log['attacker']} は {log['defender']} に {log['damage']} のダメージを与えた!\n")
+        print(f"turn {i + 1}: {log['attacker']} は {log['using_skill']} を使用 。 {log['defender']} に {log['damage']} のダメージを与えた!\n")
 
     match win_camp:
         case Camp.PLAYER:
