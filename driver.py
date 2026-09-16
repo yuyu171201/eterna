@@ -57,7 +57,7 @@ def auto_battle(
         if num_of_party_eltenas > MAX_ELTENA_PER_CAMP:
             raise ValueError("Too many actors in one camp")
 
-    action = ActionOrderManager(combatants)
+    action_order = ActionOrderManager(combatants)
 
     while True:
         survivors = get_alive_actors(combatants)
@@ -69,7 +69,7 @@ def auto_battle(
         elif num_camps == 0:
             return None, logs
             
-        attacker = action.next_actor()
+        attacker = action_order.next_actor()
         view.show_attacker(attacker)
         view.show_alive_combatants_status(combatants)
 
