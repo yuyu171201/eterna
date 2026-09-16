@@ -1,8 +1,8 @@
 from battle import (
     BattleEltena,
     Camp,
-    get_alive_actors,
-    get_living_enemies_of,
+    get_alive_combatants,
+    get_alive_enemies_of,
     is_action_usable,
     is_target_selectable,
 )
@@ -39,7 +39,7 @@ def input_target(
     attacker : BattleEltena ,
     combatants : list[BattleEltena]
 ) -> BattleEltena:
-    enemies = get_living_enemies_of(attacker, combatants)
+    enemies = get_alive_enemies_of(attacker, combatants)
 
     while True:
         try:
@@ -57,7 +57,7 @@ def input_target(
             print()
 
 def show_alive_combatants_status(combatants):
-    alives = get_alive_actors(combatants)
+    alives = get_alive_combatants(combatants)
     idx = 0
     for actor in alives:
         hp_rate = actor.current_hp / actor.master.max_hp * 100

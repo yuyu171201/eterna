@@ -5,7 +5,7 @@ from battle import (
     ActionOrderManager,
     BattleEltena,
     Camp,
-    get_alive_actors,
+    get_alive_combatants,
     get_allies_amount,
     get_enemies_of,
 )
@@ -165,7 +165,7 @@ def test_get_alives():
     death1 = BattleEltena(EltenaMaster('death1', 0, 1, 1))
 
     combatants = [alive1, alive2, death1]
-    alives = get_alive_actors(combatants)
+    alives = get_alive_combatants(combatants)
     assert len(alives) == 2
 
 def test_get_allies_amounts():

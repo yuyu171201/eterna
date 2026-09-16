@@ -87,7 +87,7 @@ class ActionOrderManager:
         self.actors = actors
 
     def tick(self):
-        self.alived_actors = get_alive_actors(self.actors)
+        self.alived_actors = get_alive_combatants(self.actors)
 
         for actor in self.alived_actors:
             actor.action_gauge += actor.spd
@@ -118,7 +118,7 @@ class ActionOrderManager:
                 return actor
 
 
-def get_alive_actors(
+def get_alive_combatants(
     combatants : list[BattleEltena]
 ) -> list[BattleEltena]:
     alives = [actor for actor in combatants if actor.is_alive]
@@ -131,12 +131,12 @@ def get_enemies_of(
     enemies = [actor for actor in combatants if actor.camp != attacker.camp]
     return enemies
 
-def get_living_enemies_of(
+def get_alive_enemies_of(
     attacker : BattleEltena ,
     combatants : list[BattleEltena]
 ) -> list[BattleEltena]:
-    valid_enemies = get_enemies_of(attacker, get_alive_actors(combatants))
-    return valid_enemies
+    alive_enemies = get_enemies_of(attacker, get_alive_combatants(combatants))
+    return alive_enemies
 
 def get_allies_of(
     attacker : BattleEltena ,

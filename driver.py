@@ -4,9 +4,9 @@ from battle import (
     ActionOrderManager,
     BattleEltena,
     Camp,
-    get_alive_actors,
+    get_alive_combatants,
+    get_alive_enemies_of,
     get_allies_amount,
-    get_enemies_of,
 )
 from eltena_master import EltenaMaster
 
@@ -29,9 +29,9 @@ def select_target(
     attacker : BattleEltena ,
     combatants : list[BattleEltena]
 ) -> BattleEltena:
-    valid_targets = get_enemies_of(attacker, get_alive_actors(combatants))
+    alive_targets = get_alive_enemies_of(attacker, combatants)
 
-    target = choice(valid_targets)
+    target = choice(alive_targets)
     return target
 
 def normal_action(attacker : BattleEltena):
@@ -60,7 +60,7 @@ def auto_battle(
     action_order = ActionOrderManager(combatants)
 
     while True:
-        survivors = get_alive_actors(combatants)
+        survivors = get_alive_combatants(combatants)
         remain_camps = [actor.camp for actor in survivors]
         num_camps = len(set(remain_camps))
 
