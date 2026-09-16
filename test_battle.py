@@ -167,7 +167,7 @@ def test_get_alives():
     alives = get_alive_actors(combatants)
     assert len(alives) == 2
 
-def get_allies_amounts():
+def test_get_allies_amounts():
     p1 = BattleEltena(EltenaMaster('p1', 1, 1, 1), Camp.PLAYER)
     p2 = BattleEltena(EltenaMaster('p2', 1, 1, 1), Camp.PLAYER)
     p3 = BattleEltena(EltenaMaster('p3', 1, 1, 1), Camp.PLAYER)
