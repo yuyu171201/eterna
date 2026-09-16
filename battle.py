@@ -145,7 +145,7 @@ def get_allies_of(
     allies = [actor for actor in combatants if actor.camp == attacker.camp]
     return allies
 
-def get_allies_amount(
+def get_count_in_camp(
     camp : Camp ,
     combatants : list[BattleEltena]  
 ) -> int:

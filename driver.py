@@ -6,7 +6,7 @@ from battle import (
     Camp,
     get_alive_combatants,
     get_alive_enemies_of,
-    get_allies_amount,
+    get_count_in_camp,
 )
 from eltena_master import EltenaMaster
 
@@ -53,7 +53,7 @@ def auto_battle(
         combatants.append(BattleEltena(master, camp=camp))
 
     for camp in Camp:
-        num_of_party_eltenas = get_allies_amount(camp, combatants)
+        num_of_party_eltenas = get_count_in_camp(camp, combatants)
         if num_of_party_eltenas > MAX_ELTENA_PER_CAMP:
             raise ValueError("Too many actors in one camp")
 
