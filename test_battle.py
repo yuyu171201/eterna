@@ -11,6 +11,7 @@ from battle import (
 )
 from driver import auto_battle
 from eltena_master import EltenaMaster
+from console import input_select_action
 
 
 def test_take_damage():
@@ -238,3 +239,11 @@ def test_no_op_battle_return(capsys):
 
     assert captured.out == ''
     assert captured.err == ''
+
+def test_console_intput(monkeypatch):
+    actor = BattleEltena(EltenaMaster('actor', 1, 1, 1, own_skills=[skills.NormalSlash(), skills.ExtraSlash()]))
+
+    monkeypatch.setattr("builtins.input", lambda _: "2")
+
+    result = input_select_action(actor)
+    assert result == actor.skills[1]
