@@ -44,7 +44,7 @@ class BattleEltena:
         return self.master.atk
 
     @property
-    def speed(self):
+    def spd(self):
         return self.master.spd
 
     @property
@@ -94,7 +94,7 @@ class ActionOrderManager:
         self.alived_actors = get_alive_actors(self.actors)
 
         for actor in self.alived_actors:
-            actor.action_gauge += actor.speed
+            actor.action_gauge += actor.spd
 
         max_action_gauge = 0
         maxed_actor = None
