@@ -75,4 +75,4 @@ def show_alive_combatants_status(combatants):
         print()
 
 def show_event(event):
-    print(f"{event['attacker']} は {event['defender']} に {event['damage']} のダメージを与えた!\n")
+    print(f"{event['attacker']} は {event['using_skill']} を使用。 {event['defender']} に {event['damage']} のダメージを与えた!\n")
