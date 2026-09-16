@@ -135,7 +135,7 @@ def get_enemies_of(
     enemies = [actor for actor in combatants if actor.camp != attacker.camp]
     return enemies
 
-def get_valid_enemies(
+def get_living_enemies_of(
     attacker : BattleEltena ,
     combatants : list[BattleEltena]
 ) -> list[BattleEltena]:
@@ -149,7 +149,7 @@ def get_allies_of(
     allies = [actor for actor in combatants if actor.camp == attacker.camp]
     return allies
 
-def get_allies_amount_of(
+def get_allies_amount(
     camp : Camp ,
     combatants : list[BattleEltena]  
 ) -> int:

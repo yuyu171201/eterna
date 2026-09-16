@@ -2,7 +2,7 @@ from battle import (
     BattleEltena,
     Camp,
     get_alive_actors,
-    get_valid_enemies,
+    get_living_enemies_of,
     is_action_usable,
     is_target_selectable,
 )
@@ -39,7 +39,7 @@ def input_target(
     attacker : BattleEltena ,
     combatants : list[BattleEltena]
 ) -> BattleEltena:
-    enemies = get_valid_enemies(attacker, combatants)
+    enemies = get_living_enemies_of(attacker, combatants)
 
     while True:
         try:
