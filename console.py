@@ -65,7 +65,7 @@ def show_alive_combatants_status(combatants):
         print(f"▶︎ hp  => {hp_rate:.2f}%")
         if actor.camp == Camp.PLAYER:
             print(f"▶︎ atk => {actor.atk}")
-            print(f"▶︎ spd => {actor.speed}")
+            print(f"▶︎ spd => {actor.spd}")
         else:
             print("▶︎ atk => ???")
             print("▶︎ spd => ???")
