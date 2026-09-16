@@ -54,10 +54,6 @@ class BattleEltena:
     @property
     def actions(self):
         return [self.normal_attack, *self.skills]
-
-    @property
-    def ready_actions(self):
-        return [action for action in self.actions if action.is_ready]
     
     def __repr__(self):
         return f'{self.__class__.__name__}(master={self.master.name}, camp={self.camp})'
