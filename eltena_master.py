@@ -14,13 +14,6 @@ class EltenaMaster:
 
         self.skills = own_skills or []
 
-    def show_status(self):
-        print(f"{self.name} のステータス")
-        print(f"HP: {self.max_hp}")
-        print(f"ATK: {self.atk}")
-        print(f"SPD: {self.spd}")
-        print()
-
 yusha_master   = EltenaMaster(
     name="勇者", 
     hp=100, 
