@@ -9,9 +9,9 @@ from battle import (
     get_allies_amount,
     get_enemies_of,
 )
+from console import input_select_action
 from driver import auto_battle
 from eltena_master import EltenaMaster
-from console import input_select_action
 
 
 def test_take_damage():
