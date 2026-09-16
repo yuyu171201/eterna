@@ -227,3 +227,14 @@ def test_ne_BattleSkill_and_BattleEltena_skill():
 
     assert skill_owner0.normal_attack is not skill_owner1.normal_attack
     assert skill_owner0.normal_attack.skill is skill_owner1.normal_attack.skill
+
+def test_no_op_battle_return(capsys):
+    player = EltenaMaster('player', 100, 100, 100)
+    enemy  = EltenaMaster('enemy', 1, 1, 1)
+    entries = [[player, Camp.PLAYER], [enemy, Camp.ENEMY]]
+
+    auto_battle(entries)
+    captured = capsys.readouterr()
+
+    assert captured.out == ''
+    assert captured.err == ''
