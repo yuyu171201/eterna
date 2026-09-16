@@ -6,7 +6,7 @@ from battle import (
     BattleEltena,
     Camp,
     get_alive_actors,
-    get_allies_amount_of,
+    get_allies_amount,
     get_enemies_of,
 )
 from driver import auto_battle
@@ -175,7 +175,7 @@ def get_allies_amounts():
     e1 = BattleEltena(EltenaMaster('p1', 1, 1, 1), Camp.ENEMY)
 
     combatants = [p1, p2, p3, p4, e1]
-    allies_amount = get_allies_amount_of(Camp.PLAYER, combatants)
+    allies_amount = get_allies_amount(Camp.PLAYER, combatants)
     assert allies_amount == 4
 
 def test_dead_actor_action_order():
