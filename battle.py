@@ -69,7 +69,7 @@ class BattleSkill:
 
     @property
     def is_ready(self):
-        return self.current_ct == self.skill.max_ct
+        return self.current_ct >= self.skill.max_ct
 
     def on_acted(self):
         if self.current_ct < self.skill.max_ct:
