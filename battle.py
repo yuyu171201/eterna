@@ -121,14 +121,14 @@ class ActionOrderManager:
 def get_alive_combatants(
     combatants : list[BattleEltena]
 ) -> list[BattleEltena]:
-    alives = [actor for actor in combatants if actor.is_alive]
+    alives = [combatant for combatant in combatants if combatant.is_alive]
     return alives
 
 def get_enemies_of(
     attacker : BattleEltena ,
     combatants : list[BattleEltena]
 ) -> list[BattleEltena]:
-    enemies = [actor for actor in combatants if actor.camp != attacker.camp]
+    enemies = [combatant for combatant in combatants if combatant.camp != attacker.camp]
     return enemies
 
 def get_alive_enemies_of(
@@ -142,14 +142,14 @@ def get_allies_of(
     attacker : BattleEltena ,
     combatants : list[BattleEltena]
 ) -> list[BattleEltena]:
-    allies = [actor for actor in combatants if actor.camp == attacker.camp]
+    allies = [combatant for combatant in combatants if combatant.camp == attacker.camp]
     return allies
 
 def get_count_in_camp(
     camp : Camp ,
     combatants : list[BattleEltena]  
 ) -> int:
-    allies = [eltena for eltena in combatants if eltena.camp == camp]
+    allies = [battle_eltena for battle_eltena in combatants if battle_eltena.camp == camp]
     return len(allies)
 
 def is_action_usable(
