@@ -53,8 +53,8 @@ def auto_battle(
         combatants.append(BattleEltena(master, camp=camp))
 
     for camp in Camp:
-        num_of_party_eltenas = get_count_in_camp(camp, combatants)
-        if num_of_party_eltenas > MAX_ELTENA_PER_CAMP:
+        count_in_camp = get_count_in_camp(camp, combatants)
+        if count_in_camp > MAX_ELTENA_PER_CAMP:
             raise ValueError("Too many actors in one camp")
 
     action_order = ActionOrderManager(combatants)

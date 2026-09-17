@@ -89,7 +89,7 @@ class ActionOrderManager:
     def tick(self):
         alive_actors = get_alive_combatants(self.actors)
 
-        for actor in self.alived_actors:
+        for actor in alive_actors:
             actor.action_gauge += actor.spd
 
         max_action_gauge = 0
