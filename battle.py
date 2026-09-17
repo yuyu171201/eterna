@@ -83,11 +83,11 @@ class BattleSkill:
         return self.skill.execute(attacker, target) 
 
 class ActionOrderManager:
-    def __init__(self, actors):
-        self.actors = actors
+    def __init__(self, combatants : list[BattleEltena]):
+        self.combatants = combatants
 
     def tick(self):
-        alive_actors = get_alive_combatants(self.actors)
+        alive_actors = get_alive_combatants(self.combatants)
 
         for actor in alive_actors:
             actor.action_gauge += actor.spd

@@ -1,4 +1,4 @@
-# import pytest
+import pytest
 
 import skills
 from battle import (
@@ -206,10 +206,9 @@ def test_over_max_amount_per_camp():
         [actor5, Camp.PLAYER] ,
         [actor6, Camp.ENEMY]
     ]
-    try:
+
+    with pytest.raises(ValueError):
         auto_battle(entries)
-    except ValueError as e:
-        assert str(e) == "Too many actors in one camp"
 
 def test_default_skill_execution():
     skill = skills.Skill("Attack", 100)
