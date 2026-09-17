@@ -149,8 +149,8 @@ def get_count_in_camp(
     camp : Camp ,
     combatants : list[BattleEltena]  
 ) -> int:
-    allies = [battle_eltena for battle_eltena in combatants if battle_eltena.camp == camp]
-    return len(allies)
+    in_camps = [battle_eltena for battle_eltena in combatants if battle_eltena.camp == camp]
+    return len(in_camps)
 
 def is_action_usable(
         action_idx : int ,
