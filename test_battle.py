@@ -41,43 +41,43 @@ def test_winner_camp():
 def test_speed_order():
     actor1 = BattleEltena(EltenaMaster("勇者", 200, 10, 100), Camp.PLAYER)
     actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 90), Camp.ENEMY)
-    action = ActionOrderManager([actor1, actor2])
+    action_order = ActionOrderManager([actor1, actor2])
     assert actor1.action_gauge == 0
     assert actor2.action_gauge == 0
-    action.tick()
+    action_order.tick()
     assert actor1.action_gauge == 100
     assert actor2.action_gauge == 90
     for i in range(99):
-        action.tick()
+        action_order.tick()
     assert actor1.action_gauge == 0
     assert actor2.action_gauge == 9000
 
 def test_speed_order_same_tick_to_threshold():
     actor1 = BattleEltena(EltenaMaster("勇者", 20, 10, 150), Camp.PLAYER)
     actor2 = BattleEltena(EltenaMaster("スライム", 20, 5, 151), Camp.ENEMY)
-    action = ActionOrderManager([actor1, actor2])
-    action.next_actor()
+    action_order = ActionOrderManager([actor1, actor2])
+    action_order.next_actor()
     assert actor1.action_gauge == 10050 # 150 * 67
     assert actor2.action_gauge == 117   # 151 * 67 - 10000
-    action.next_actor()
+    action_order.next_actor()
     assert actor1.action_gauge == 200   # 150 * 68 - 10000
     assert actor2.action_gauge == 268   # 151 * 68 - 10000
 
 def test_overheat_allows_double_at_3x():
     actor1 = BattleEltena(EltenaMaster("勇者", 200, 10, 150), Camp.PLAYER)
     actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 50), Camp.ENEMY)
-    action = ActionOrderManager([actor1, actor2])
-    action.next_actor()
+    action_order = ActionOrderManager([actor1, actor2])
+    action_order.next_actor()
     assert actor1.action_gauge == 50    # 150 * 67  - 10000
     assert actor1.threshold == 20000
     assert actor2.action_gauge == 3350  # 50  * 67
     assert actor2.threshold == 10000 
-    action.next_actor()
+    action_order.next_actor()
     assert actor1.action_gauge == 0     # 150 * 200 - 10000 - 20000
     assert actor1.threshold == 30000
     assert actor2.action_gauge == 10000 # 50  * 200
     assert actor2.threshold == 10000
-    action.next_actor()
+    action_order.next_actor()
     assert actor1.action_gauge == 150   # 150 * 201 - 30000
     assert actor1.threshold == 10000
     assert actor2.action_gauge == 50    # 50  * 201 - 10000
@@ -86,23 +86,23 @@ def test_overheat_allows_double_at_3x():
 def test_overheat_allows_double_at_4x():
     actor1 = BattleEltena(EltenaMaster("勇者", 200, 10, 200), Camp.PLAYER)
     actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 50), Camp.ENEMY)
-    action = ActionOrderManager([actor1, actor2])
-    action.next_actor()
+    action_order = ActionOrderManager([actor1, actor2])
+    action_order.next_actor()
     assert actor1.action_gauge == 0     # 200 * 50  - 10000
     assert actor1.threshold == 20000
     assert actor2.action_gauge == 2500  # 50  * 50 
     assert actor2.threshold == 10000
-    action.next_actor()
+    action_order.next_actor()
     assert actor1.action_gauge == 0     # 200 * 150 - 10000 - 20000
     assert actor1.threshold == 30000
     assert actor2.action_gauge == 7500  # 50  * 150
     assert actor2.threshold == 10000
-    action.next_actor()
+    action_order.next_actor()
     assert actor1.action_gauge == 10000  # 200 * 200 - 30000
     assert actor1.threshold == 10000
     assert actor2.action_gauge == 0      # 50  * 200
     assert actor2.threshold == 20000
-    action.next_actor()
+    action_order.next_actor()
     assert actor1.action_gauge == 200    # 200 * 201 - 30000 - 10000
     assert actor1.threshold == 20000
     assert actor2.action_gauge == 50     # 50  * 201 - 20000
@@ -111,18 +111,18 @@ def test_overheat_allows_double_at_4x():
 def test_overheat_action_order():
     actor1 = BattleEltena(EltenaMaster("勇者", 200, 10, 60), Camp.PLAYER)
     actor2 = BattleEltena(EltenaMaster("スライム", 200, 5, 50), Camp.ENEMY)
-    action = ActionOrderManager([actor1, actor2])
-    actor = action.next_actor()
+    action_order = ActionOrderManager([actor1, actor2])
+    actor = action_order.next_actor()
     assert actor == actor1
-    actor = action.next_actor()
+    actor = action_order.next_actor()
     assert actor == actor2
-    actor = action.next_actor()
+    actor = action_order.next_actor()
     assert actor == actor1
-    actor = action.next_actor()
+    actor = action_order.next_actor()
     assert actor == actor2
-    actor = action.next_actor()
+    actor = action_order.next_actor()
     assert actor == actor1
-    actor = action.next_actor()
+    actor = action_order.next_actor()
     assert actor == actor2
 
 def test_overheat_action_order_3player():
@@ -132,14 +132,14 @@ def test_overheat_action_order_3player():
     sandbag = BattleEltena(EltenaMaster("相手", 100000, 0, 1), Camp.ENEMY)
 
     combatants = [actor1, actor2, actor3, sandbag]
-    action = ActionOrderManager(combatants)
+    action_order = ActionOrderManager(combatants)
 
-    assert action.next_actor() == actor1
-    assert action.next_actor() == actor2
-    assert action.next_actor() == actor1
-    assert action.next_actor() == actor2
-    assert action.next_actor() == actor1
-    assert action.next_actor() == actor3
+    assert action_order.next_actor() == actor1
+    assert action_order.next_actor() == actor2
+    assert action_order.next_actor() == actor1
+    assert action_order.next_actor() == actor2
+    assert action_order.next_actor() == actor1
+    assert action_order.next_actor() == actor3
 
 def test_get_enemies_player_to_enemy():
     player1 = BattleEltena(EltenaMaster('player1', 1, 1, 1), Camp.PLAYER)
@@ -185,9 +185,9 @@ def test_dead_actor_action_order():
     death1_enemy  = BattleEltena(EltenaMaster('enemy2',  0 , 1, 10), Camp.ENEMY)
 
     combatants = [alive1_player, alive2_enemy, death1_enemy]
-    action = ActionOrderManager(combatants)
+    action_order = ActionOrderManager(combatants)
     for _ in range(10):
-        attacker = action.next_actor()
+        attacker = action_order.next_actor()
         assert attacker != death1_enemy
 
 def test_over_max_amount_per_camp():
