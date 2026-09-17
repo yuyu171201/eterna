@@ -59,13 +59,13 @@ def input_target(
 def show_alive_combatants_status(combatants):
     alives = get_alive_combatants(combatants)
     idx = 0
-    for actor in alives:
-        hp_rate = actor.current_hp / actor.master.max_hp * 100
-        print(f"{actor.name} のステータス")
+    for conbatant in alives:
+        hp_rate = conbatant.current_hp / conbatant.master.max_hp * 100
+        print(f"{conbatant.name} のステータス")
         print(f"▶︎ hp  => {hp_rate:.2f}%")
-        if actor.camp == Camp.PLAYER:
-            print(f"▶︎ atk => {actor.atk}")
-            print(f"▶︎ spd => {actor.spd}")
+        if conbatant.camp == Camp.PLAYER:
+            print(f"▶︎ atk => {conbatant.atk}")
+            print(f"▶︎ spd => {conbatant.spd}")
         else:
             print("▶︎ atk => ???")
             print("▶︎ spd => ???")

@@ -9,7 +9,7 @@ from battle import (
     get_count_in_camp,
     get_enemies_of,
 )
-from console import input_select_action
+from console import input_select_action, input_target
 from driver import auto_battle
 from eltena_master import EltenaMaster
 
@@ -239,10 +239,22 @@ def test_no_op_battle_return(capsys):
     assert captured.out == ''
     assert captured.err == ''
 
-def test_console_intput(monkeypatch):
+def test_console_input(monkeypatch):
     actor = BattleEltena(EltenaMaster('actor', 1, 1, 1, own_skills=[skills.NormalSlash(), skills.ExtraSlash()]))
 
     monkeypatch.setattr("builtins.input", lambda _: "2")
 
     result = input_select_action(actor)
     assert result == actor.skills[1]
+
+def test_console_input_invalid(monkeypatch):
+    attacker = BattleEltena(EltenaMaster('attacker', 1, 1, 1), Camp.PLAYER)
+    target1 = BattleEltena(EltenaMaster('target1', 1, 1, 1), Camp.ENEMY)
+    target2 = BattleEltena(EltenaMaster('target2', 1, 1, 1), Camp.ENEMY)
+    combatants = [attacker, target1, target2]
+
+    send_values = iter(["3", "0"])
+
+    monkeypatch.setattr("builtins.input", lambda _: next(send_values))
+    result = input_target(attacker, combatants)
+    assert result is target1
