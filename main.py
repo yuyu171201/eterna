@@ -30,11 +30,11 @@ if __name__ == "__main__":
 
     match win_camp:
         case Camp.PLAYER:
-            winner = '自'
+            winner_label = '自'
         case Camp.ENEMY:
-            winner = '敵'
+            winner_label = '敵'
         case _:
-            winner = None
+            winner_label = None
 
-    if winner:
-        print(f"{winner}陣営が勝利しました。")
+    if winner_label:
+        print(f"{winner_label}陣営が勝利しました。")
