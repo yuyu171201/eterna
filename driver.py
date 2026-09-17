@@ -61,7 +61,7 @@ def auto_battle(
 
     while True:
         survivors = get_alive_combatants(combatants)
-        remain_camps = [actor.camp for actor in survivors]
+        remain_camps = [survivor.camp for survivor in survivors]
         num_camps = len(set(remain_camps))
 
         if num_camps == 1:
