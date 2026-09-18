@@ -48,7 +48,6 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "fastapi" },
-    { name = "ruff" },
 ]
 
 [package.dev-dependencies]
@@ -58,10 +57,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "fastapi", specifier = ">=0.141.1" },
-    { name = "ruff", specifier = ">=0.16.6" },
-]
+requires-dist = [{ name = "fastapi", specifier = ">=0.141.1" }]
 
 [package.metadata.requires-dev]
 dev = [
