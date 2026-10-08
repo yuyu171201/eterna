@@ -21,6 +21,6 @@ def run_auto_battle():
     win_camp, logs = auto_battle(entries)
 
     return {
-        "winner": win_camp.name if win_camp is not None else 'null',
+        "winner": win_camp.name if win_camp is not None else None,
         "logs": logs
     }
